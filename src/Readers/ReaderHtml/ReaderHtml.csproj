@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Worker">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+        <UserSecretsId>dotnet-ReaderHtml-01FA79F2-64E1-4409-A11A-5DECB6A14662</UserSecretsId>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="MassTransit.Extensions.DependencyInjection" Version="6.3.2" />
+        <PackageReference Include="MassTransit.RabbitMQ" Version="6.3.2" />
+        <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.1.4" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\Core\Dto\Dto.csproj" />
+      <ProjectReference Include="..\..\Core\Queue\Queue.csproj" />
+    </ItemGroup>
+</Project>

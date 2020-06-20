@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Worker">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+        <UserSecretsId>dotnet-ManagerService-8A81235D-94DF-4A72-A4D1-96CC1FD56B12</UserSecretsId>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="AutoMapper" Version="9.0.0" />
+        <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
+        <PackageReference Include="MassTransit.Extensions.DependencyInjection" Version="6.3.2" />
+        <PackageReference Include="MassTransit.RabbitMQ" Version="6.3.2" />
+        <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.1.4" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Core\Domain\Domain.csproj" />
+      <ProjectReference Include="..\Core\Dto\Dto.csproj" />
+      <ProjectReference Include="..\Core\Queue\Queue.csproj" />
+    </ItemGroup>
+</Project>
