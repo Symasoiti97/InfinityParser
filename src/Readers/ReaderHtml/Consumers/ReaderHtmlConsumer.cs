@@ -28,9 +28,12 @@ namespace ReaderHtml.Consumers
             _logger.LogInformation(context.Message.Url + " : " + context.Message.Type + " date: " + DateTime.Now, DateTimeOffset.Now);
 
             var htmlContent = _readerHtmlService.GetAsync(context.Message.Url).Result;
-            
-            _logger.LogInformation(htmlContent);
 
+            _publishEndpoint.Publish(new HtmlMessageDto
+            {
+                HtmlContent = htmlContent
+            });
+            
             return Task.CompletedTask;
         }
     }

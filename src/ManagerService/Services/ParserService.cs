@@ -23,7 +23,7 @@ namespace ManagerService.Services
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _timer = timer ?? throw new ArgumentNullException(nameof(timer));
             _timer.Elapsed += TimerOnElapsed;
-            _timer.Interval = TimeSpan.FromMinutes(1).TotalMilliseconds;
+            _timer.Interval = TimeSpan.FromMinutes(100).TotalMilliseconds;
         }
 
         public void Init(SiteDto site)
@@ -35,6 +35,8 @@ namespace ManagerService.Services
         {
             if(_site == null) throw new ArgumentNullException(nameof(_site));
             
+            PublishMessage();
+            
             _timer.Start();
         }
 
@@ -44,6 +46,11 @@ namespace ManagerService.Services
         }
 
         private void TimerOnElapsed(object sender, ElapsedEventArgs e)
+        {
+            PublishMessage();
+        }
+
+        private void PublishMessage()
         {
             _massTransitCenter.Publish(new SiteMessageDto
             {

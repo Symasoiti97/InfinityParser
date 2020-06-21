@@ -6,5 +6,6 @@ namespace ManagerService.Services
     {
         void Init(SiteDto site);
         void StartParsing();
+        void StopParsing();
     }
 }

@@ -1,0 +1,10 @@
+﻿{
+  "profiles": {
+    "DistributorService": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}

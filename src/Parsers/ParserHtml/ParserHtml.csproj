@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Worker">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+        <UserSecretsId>dotnet-ParserHtml-DED7E249-E43E-411B-BF0F-E38942C22FD0</UserSecretsId>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="HtmlAgilityPack" Version="1.11.24" />
+        <PackageReference Include="MassTransit" Version="6.3.2" />
+        <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.1.4" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\Core\Dto\Dto.csproj" />
+      <ProjectReference Include="..\..\Core\Helper\Helper.csproj" />
+      <ProjectReference Include="..\..\Core\Queue\Queue.csproj" />
+    </ItemGroup>
+</Project>
