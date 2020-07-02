@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using Domain.Models;
+using Db.Models;
 using Domain.Provider;
 using Dto;
 using Microsoft.Extensions.DependencyInjection;

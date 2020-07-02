@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Dto.HtmlMessage;
+using Dto.QueueMessages;
 using MassTransit;
 using Microsoft.Extensions.Logging;
 using ReaderHtml.Services;
@@ -25,12 +25,15 @@ namespace ReaderHtml.Consumers
 
         public Task Consume(ConsumeContext<SiteMessageDto> context)
         {
-            _logger.LogInformation(context.Message.Url + " : " + context.Message.Type + " date: " + DateTime.Now, DateTimeOffset.Now);
+            var site = context.Message.Site;
+            
+            _logger.LogInformation("{0} : {1} | Date: {2}", site.Url, site.ItemType, DateTimeOffset.Now);
 
-            var htmlContent = _readerHtmlService.GetAsync(context.Message.Url).Result;
+            var htmlContent = _readerHtmlService.GetAsync(site.Url).Result;
 
             _publishEndpoint.Publish(new HtmlMessageDto
             {
+                Site = site,
                 HtmlContent = htmlContent
             });
             

@@ -10,7 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Queue;
 using AutoMapper;
-using Domain.Mappers;
+using Helper.Mappers;
 
 namespace ManagerService
 {

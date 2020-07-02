@@ -1,0 +1,35 @@
+﻿using System;
+using System.Threading.Tasks;
+using DistributorService.Services.Adapter;
+using Dto.QueueMessages;
+using MassTransit;
+using Microsoft.Extensions.Logging;
+
+namespace DistributorService.Consumers
+{
+    public class DistributorConsumer : IConsumer<DistributorMessageDto>
+    {
+        private readonly ILogger<DistributorConsumer> _logger;
+        private readonly IPublishEndpoint _publishEndpoint;
+        private readonly IAdapterService _adapterService;
+
+        public DistributorConsumer(
+            ILogger<DistributorConsumer> logger,
+            IPublishEndpoint publishEndpoint,
+            IAdapterService adapterService)
+        {
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _publishEndpoint = publishEndpoint ?? throw new ArgumentNullException(nameof(publishEndpoint));
+            _adapterService = adapterService ?? throw new ArgumentNullException(nameof(adapterService));
+        }
+
+        public Task Consume(ConsumeContext<DistributorMessageDto> context)
+        {
+            _logger.LogInformation("ParserHtml. Date: {0}", DateTimeOffset.Now);
+
+            _adapterService.SaveAndPublishNotify(context.Message.Site, context.Message.ThreeNineMdCollection).GetAwaiter();
+
+            return Task.CompletedTask;
+        }
+    }
+}

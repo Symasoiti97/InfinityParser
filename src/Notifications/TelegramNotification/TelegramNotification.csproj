@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Worker">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+        <UserSecretsId>dotnet-TelegramNotification-A5E56330-825F-46CA-A3F1-C4D13D831F3B</UserSecretsId>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.1.4" />
+        <PackageReference Include="Telegram.Bot" Version="15.7.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\Core\Dto\Dto.csproj" />
+      <ProjectReference Include="..\..\Core\Queue\Queue.csproj" />
+    </ItemGroup>
+</Project>

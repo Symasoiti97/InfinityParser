@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Dto.HtmlMessage;
+using Dto.QueueMessages;
 using Dto.ThreeNineMd;
 using Helper.Extensions;
 using MassTransit;
@@ -30,12 +30,14 @@ namespace ParserHtml.Consumers
         {
             _logger.LogInformation("ParserHtml. Date: {0}", DateTimeOffset.Now);
 
-            var items = _parserService.ParseHtmlContent(context.Message.HtmlContent);
+            var items = _parserService.ParseHtmlContent(context.Message.HtmlContent).Result;
 
-            _logger.LogInformation(items.ToJson());
-            
-            //_publishEndpoint.Publish();
-            
+            _publishEndpoint.Publish(new DistributorMessageDto
+            {
+                ThreeNineMdCollection = items,
+                Site = context.Message.Site
+            });
+
             return Task.CompletedTask;
         }
     }

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Timers;
 using Dto;
-using Dto.HtmlMessage;
+using Dto.QueueMessages;
 using Microsoft.Extensions.Logging;
 using Queue;
 
@@ -54,8 +54,7 @@ namespace ManagerService.Services
         {
             _massTransitCenter.Publish(new SiteMessageDto
             {
-                Url = _site.Url,
-                Type = _site.Type
+                Site = _site
             });
 
             _logger.LogInformation($"Send message. Date: {DateTime.Now}", DateTimeOffset.Now);

@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore.Storage;
+using System.Transactions;
+using Db.Interfaces;
+using Helper.Exceptions;
+using Npgsql;
 
 namespace Domain.Provider
 {
@@ -16,24 +19,51 @@ namespace Domain.Provider
             _db = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        public async Task<IDbContextTransaction> Transaction()
+        public TransactionScope Transaction(IsolationLevel isolationLevel = IsolationLevel.ReadCommitted)
         {
-            return await _db.Database.BeginTransactionAsync();
+            var ambientLevel = System.Transactions.Transaction.Current?.IsolationLevel;
+            var txOptions = new TransactionOptions
+            {
+                IsolationLevel = ambientLevel == null ? isolationLevel : (IsolationLevel) Math.Min((int) ambientLevel, (int) isolationLevel)
+            };
+            return new TransactionScope(TransactionScopeOption.Required, txOptions, TransactionScopeAsyncFlowOption.Enabled);
         }
 
         public async Task Insert<T>(T model) where T : class
         {
-            await _db.Set<T>().AddAsync(model);
-            await _db.SaveChangesAsync();
+            await ExecuteCommand(async () =>
+            {
+                if (model is ICreatable m)
+                {
+                    m.CreateDate = DateTime.UtcNow;
+                }
+
+                await _db.Set<T>().AddAsync(model);
+                return await _db.SaveChangesAsync();
+            });
         }
 
         public async Task InsertRange<T>(IEnumerable<T> models) where T : class
         {
-            if (models != null && models.Any())
+            await ExecuteCommand(async () =>
             {
-                await _db.Set<T>().AddRangeAsync(models);
-                await _db.SaveChangesAsync();
-            }
+                var entities = models as T[] ?? models.ToArray();
+
+                if (entities.Any())
+                {
+                    foreach (var entity in entities)
+                    {
+                        if (entity is ICreatable m)
+                        {
+                            m.CreateDate = DateTime.UtcNow;
+                        }
+                    }
+
+                    await _db.Set<T>().AddRangeAsync(entities);
+                }
+
+                return await _db.SaveChangesAsync();
+            });
         }
 
         public IQueryable<T> Get<T>() where T : class
@@ -54,9 +84,11 @@ namespace Domain.Provider
 
         public async Task DeleteRange<T>(IEnumerable<T> models) where T : class
         {
-            if (models != null && models.Any())
+            var entities = models as T[] ?? models.ToArray();
+
+            if (entities.Any())
             {
-                _db.Set<T>().RemoveRange(models);
+                _db.Set<T>().RemoveRange(entities);
                 await _db.SaveChangesAsync();
             }
         }
@@ -66,11 +98,35 @@ namespace Domain.Provider
             _db.Set<T>().Update(model);
             await _db.SaveChangesAsync();
         }
-        
+
         public async Task UpdateRange<T>(IEnumerable<T> models) where T : class
         {
             _db.Set<T>().UpdateRange(models);
             await _db.SaveChangesAsync();
+        }
+
+        private static async Task ExecuteCommand(Func<Task<int>> func)
+        {
+            try
+            {
+                await func();
+            }
+            catch (Exception exception) when (exception.InnerException is PostgresException ex)
+            {
+                var message = ex.Message + ex.Detail;
+
+                if (ex.SqlState == "23505")
+                {
+                    throw new ObjectAlreadyExistsException(message, ex);
+                }
+
+                // if (ex.SqlState == "40001")
+                // {
+                //     throw new ConcurrentModifyException(message, ex);
+                // }
+
+                throw new PostgreSqlException(ex.SqlState, message, ex);
+            }
         }
     }
 }

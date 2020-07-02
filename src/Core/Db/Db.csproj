@@ -4,8 +4,4 @@
         <TargetFramework>netstandard2.1</TargetFramework>
     </PropertyGroup>
 
-    <ItemGroup>
-      <ProjectReference Include="..\Db\Db.csproj" />
-    </ItemGroup>
-
 </Project>

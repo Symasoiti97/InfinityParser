@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore.Storage;
+using System.Transactions;
 
 namespace Domain.Provider
 {
     public interface IDataProvider
     {
-        Task<IDbContextTransaction> Transaction();
+        TransactionScope Transaction(IsolationLevel isolationLevel = IsolationLevel.ReadCommitted);
         Task Insert<T>(T model) where T : class;
         Task InsertRange<T>(IEnumerable<T> models) where T : class;
         IQueryable<T> Get<T>() where T : class;

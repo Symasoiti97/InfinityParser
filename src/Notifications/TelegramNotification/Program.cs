@@ -1,6 +1,6 @@
 using Microsoft.Extensions.Hosting;
 
-namespace DistributorService
+namespace TelegramNotification
 {
     public class Program
     {
@@ -11,6 +11,6 @@ namespace DistributorService
 
         private static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .ConfigureServices(DistributorStartup.ConfigureService);
+                .ConfigureServices(TelegramNotificationStartup.ConfigureService);
     }
 }

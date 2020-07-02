@@ -1,8 +1,7 @@
-﻿namespace Dto.HtmlMessage
+﻿namespace Dto.QueueMessages
 {
     public class SiteMessageDto
     {
-        public string Url { get; set; }
-        public string Type { get; set; }
+        public SiteDto Site { get; set; }
     }
 }
