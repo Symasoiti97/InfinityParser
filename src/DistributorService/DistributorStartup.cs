@@ -28,8 +28,7 @@ namespace DistributorService
             ConfigureMassTransit(services);
             
             services.AddDbContext<InfinityParserDbContext>(optionsBuilder =>
-                    optionsBuilder.UseNpgsql(
-                        "Server=127.0.0.1;Port=5432;User Id=postgres;Password=postgres;Database=InfinityParser;Pooling=true;MinPoolSize=15;MaxPoolSize=20;CommandTimeout=20;Timeout=20"));
+                    optionsBuilder.UseNpgsql(configuration.GetConnectionString("Postgres")));
             services.AddScoped<IDataProvider, DataProvider>();
 
             services.AddSingleton<ICacheService, CacheService>();
