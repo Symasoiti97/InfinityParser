@@ -27,7 +27,8 @@ namespace DistributorService
 
             ConfigureMassTransit(services);
             
-            services.AddDbContext<InfinityParserDbContext>(optionsBuilder =>
+            services.AddEntityFrameworkNpgsql()
+                .AddDbContext<InfinityParserDbContext>(optionsBuilder =>
                     optionsBuilder.UseNpgsql(configuration["ConnectionString:Postgres"]));
             services.AddScoped<IDataProvider, DataProvider>();
 

@@ -22,13 +22,14 @@ namespace ManagerService.Services
             _massTransitCenter = massTransitCenter ?? throw new ArgumentNullException(nameof(massTransitCenter));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _timer = timer ?? throw new ArgumentNullException(nameof(timer));
-            _timer.Elapsed += TimerOnElapsed;
-            _timer.Interval = TimeSpan.FromMinutes(100).TotalMilliseconds;
         }
 
         public void Init(SiteDto site)
         {
             _site = site;
+            _timer.Elapsed += TimerOnElapsed;
+            var interval = new Random().Next(_site.IntervalFrom, _site.IntervalTo);
+            _timer.Interval = TimeSpan.FromSeconds(interval).TotalMilliseconds;
         }
 
         public void StartParsing()

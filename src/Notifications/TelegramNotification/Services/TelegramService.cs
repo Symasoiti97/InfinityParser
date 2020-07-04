@@ -12,9 +12,10 @@ namespace TelegramNotification.Services
 {
     public class TelegramService : ITelegramService
     {
-        private static readonly int PublishItemCount = 20;
+        private const int PublishItemCount = 20;
         private readonly ILogger<TelegramService> _logger;
         private readonly ITelegramBotClient _telegramBotClient;
+        private static readonly int TimePeriod = int.Parse(TimeSpan.FromSeconds(65).TotalMilliseconds.ToString());
 
         public TelegramService(
             ILogger<TelegramService> logger,
@@ -30,15 +31,25 @@ namespace TelegramNotification.Services
 
             var count = items.Count() / PublishItemCount;
 
-            for (var i = 0; i < count; i++)
+            for (var i = 0; i <= count; i++)
             {
                 var notifyItems = items.Skip(i * PublishItemCount).Take(PublishItemCount);
 
                 foreach (var item in notifyItems)
                 {
-                    await _telegramBotClient.SendTextMessageAsync(chatId, BuildHtmlMessage(item), ParseMode.Html);
-                    _logger.LogInformation("Telegram | ChatId: {0}\t NameObject: {1}", chatId.Identifier, typeof(T).Name);
+                    try
+                    {
+                        await _telegramBotClient.SendTextMessageAsync(chatId, BuildHtmlMessage(item), ParseMode.Html);
+                        _logger.LogInformation("[{0}]\t Telegram | ChatId: {1}\t NameObject: {2}", DateTime.UtcNow, chatId.Identifier, typeof(T).Name);
+                    }
+                    catch (Exception e)
+                    {
+                        _logger.LogError("[{0}]\tTelegram | ChatId: {1}\t NameObject: {2}\n{3}", DateTime.UtcNow, chatId.Identifier, typeof(T).Name, e.Message);
+                    }
+
                 }
+
+                await Task.Delay(TimePeriod);
             }
         }
 

@@ -39,7 +39,7 @@ namespace Domain.Provider
                 }
 
                 await _db.Set<T>().AddAsync(model);
-                return await _db.SaveChangesAsync();
+                return _db.SaveChanges();
             });
         }
 
@@ -62,7 +62,7 @@ namespace Domain.Provider
                     await _db.Set<T>().AddRangeAsync(entities);
                 }
 
-                return await _db.SaveChangesAsync();
+                return _db.SaveChanges();
             });
         }
 

@@ -10,16 +10,13 @@ namespace DistributorService.Consumers
     public class DistributorConsumer : IConsumer<DistributorMessageDto>
     {
         private readonly ILogger<DistributorConsumer> _logger;
-        private readonly IPublishEndpoint _publishEndpoint;
         private readonly IAdapterService _adapterService;
 
         public DistributorConsumer(
             ILogger<DistributorConsumer> logger,
-            IPublishEndpoint publishEndpoint,
             IAdapterService adapterService)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _publishEndpoint = publishEndpoint ?? throw new ArgumentNullException(nameof(publishEndpoint));
             _adapterService = adapterService ?? throw new ArgumentNullException(nameof(adapterService));
         }
 

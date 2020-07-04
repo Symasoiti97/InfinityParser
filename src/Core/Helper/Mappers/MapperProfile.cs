@@ -13,6 +13,8 @@ namespace Helper.Mappers
         {
             CreateMap<SiteDb, SiteDto>()
                 .ForMember(d => d.Notifications, o => o.MapFrom(s => s.Notifications.FromJson<Dictionary<NotificationType, string>>()));
+
+            CreateMap<ClientDb, ClientDto>();
         }
     }
 }
