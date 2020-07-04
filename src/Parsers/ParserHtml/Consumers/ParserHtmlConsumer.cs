@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Dto.QueueMessages;
 using Dto.ThreeNineMd;
-using Helper.Extensions;
 using MassTransit;
 using Microsoft.Extensions.Logging;
 using ParserHtml.Services;

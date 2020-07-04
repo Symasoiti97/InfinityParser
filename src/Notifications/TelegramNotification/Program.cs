@@ -1,5 +1,5 @@
+using Logger;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 
 namespace TelegramNotification
 {
@@ -13,7 +13,7 @@ namespace TelegramNotification
         private static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
                 .UseWindowsService()
-                .ConfigureLogging(loggerFactory => loggerFactory.AddEventLog())
+                .ConfigureLogging(loggerFactory => loggerFactory.AddFileProvider())
                 .ConfigureServices(TelegramNotificationStartup.ConfigureService);
     }
 }
