@@ -20,7 +20,7 @@ namespace ParserHtml
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            _logger.LogInformation("ParserHtmlService worker running at: {time}", DateTimeOffset.Now);
+            _logger.LogInformation("ParserHtmlService worker running");
             
             _busControl.StartAsync(stoppingToken);
 
@@ -29,7 +29,7 @@ namespace ParserHtml
 
         public override Task StopAsync(CancellationToken cancellationToken)
         {
-            _logger.LogInformation("ParserHtmlService stopping at: {time}", DateTimeOffset.Now);
+            _logger.LogInformation("ParserHtmlService stopping");
             
             return base.StopAsync(cancellationToken);
         }

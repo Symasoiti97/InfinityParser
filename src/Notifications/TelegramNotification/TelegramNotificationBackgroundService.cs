@@ -22,7 +22,7 @@ namespace TelegramNotification
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            _logger.LogInformation("TelegramNotificationService running at: {time}", DateTimeOffset.Now);
+            _logger.LogInformation("TelegramNotificationService running");
 
             _busControl.StartAsync(stoppingToken);
 
@@ -31,7 +31,7 @@ namespace TelegramNotification
 
         public override Task StopAsync(CancellationToken cancellationToken)
         {
-            _logger.LogInformation("TelegramNotificationService stopping at: {time}", DateTimeOffset.Now);
+            _logger.LogInformation("TelegramNotificationService stopping");
             
             return base.StopAsync(cancellationToken);
         }

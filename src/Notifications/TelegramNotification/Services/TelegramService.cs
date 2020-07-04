@@ -40,13 +40,12 @@ namespace TelegramNotification.Services
                     try
                     {
                         await _telegramBotClient.SendTextMessageAsync(chatId, BuildHtmlMessage(item), ParseMode.Html);
-                        _logger.LogInformation("[{0}]\t Telegram | ChatId: {1}\t NameObject: {2}", DateTime.UtcNow, chatId.Identifier, typeof(T).Name);
+                        _logger.LogInformation("Telegram | ChatId: {0}\t NameObject: {1}", chatId.Identifier, typeof(T).Name);
                     }
                     catch (Exception e)
                     {
-                        _logger.LogError("[{0}]\tTelegram | ChatId: {1}\t NameObject: {2}\n{3}", DateTime.UtcNow, chatId.Identifier, typeof(T).Name, e.Message);
+                        _logger.LogError(e, "Telegram | ChatId: {0}\t NameObject: {1}", chatId.Identifier, typeof(T).Name);
                     }
-
                 }
 
                 await Task.Delay(TimePeriod);

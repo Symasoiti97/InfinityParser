@@ -79,11 +79,11 @@ namespace DistributorService.Services.Adapter
                     Items = items.Cast<ShortThreeNineMdItem>()
                 };
                 await _publishEndpoint.Publish(message);
-                _logger.LogInformation("Telegram service publish ChatId: {0}\nCount item: {1}\nDate: {2}", chatId, items.Count(), DateTimeOffset.Now);
+                _logger.LogInformation("Telegram service publish ChatId: {0}\nCount item: {1}", chatId, items.Length);
             }
             else
             {
-                _logger.LogError("Telegram service publish ChatId: {0}\nCount item: {1}\nDate: {2}", chatId, items.Count(), DateTimeOffset.Now);
+                _logger.LogError("Telegram service publish ChatId: {0}\nCount item: {1}", chatId, items.Length);
             }
         }
 
@@ -108,7 +108,7 @@ namespace DistributorService.Services.Adapter
                 {
                     if (!(e is ObjectAlreadyExistsException))
                     {
-                        _logger.LogError($"Error inserting row in data base: {e.Message}");
+                        _logger.LogError(e, "Error inserting row in data base.");
                     }
                 }
             }

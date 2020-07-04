@@ -20,7 +20,7 @@ namespace DistributorService
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            _logger.LogInformation("DistributorService running at: {time}", DateTimeOffset.Now);
+            _logger.LogInformation("DistributorService running");
 
             _busControl.StartAsync(stoppingToken);
 
@@ -29,7 +29,7 @@ namespace DistributorService
 
         public override Task StopAsync(CancellationToken cancellationToken)
         {
-            _logger.LogInformation("DistributorService stopping at: {time}", DateTimeOffset.Now);
+            _logger.LogInformation("DistributorService stopping");
             return base.StopAsync(cancellationToken);
         }
     }

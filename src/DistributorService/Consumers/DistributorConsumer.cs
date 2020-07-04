@@ -22,7 +22,7 @@ namespace DistributorService.Consumers
 
         public Task Consume(ConsumeContext<DistributorMessageDto> context)
         {
-            _logger.LogInformation("[{0}]:\t{1} - Get Message", DateTimeOffset.Now, typeof(DistributorConsumer).Name);
+            _logger.LogInformation("{0} - Get Message", typeof(DistributorConsumer).Name);
 
             _adapterService.SaveAndPublishNotify(context.Message.Site, context.Message.ThreeNineMdCollection).GetAwaiter();
 

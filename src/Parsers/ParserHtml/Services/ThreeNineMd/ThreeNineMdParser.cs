@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Dto.ThreeNineMd;
 using HtmlAgilityPack;
@@ -39,7 +40,7 @@ namespace ParserHtml.Services.ThreeNineMd
                 }
                 catch (Exception e)
                 {
-                    _logger.LogWarning("[{0}]:\t{1} - Error parsing list for resource {2}\n{3}", DateTimeOffset.Now, typeof(ThreeNineMdParser).Name, BaseUrl.ToString(), e.Message);
+                    _logger.LogWarning(e, "{0} - Error parsing list for resource {1}", typeof(ThreeNineMdParser).Name, BaseUrl.ToString());
                     return Enumerable.Empty<ShortThreeNineMdItem>();
                 }
             });
@@ -77,7 +78,7 @@ namespace ParserHtml.Services.ThreeNineMd
             }
             catch (Exception e)
             {
-                _logger.Log(LogLevel.Error, e.ToString(), DateTime.Now);
+                _logger.LogError(e, "Error parsing HtmlNode: {0}", htmlNode);
                 return null;
             }
         }
@@ -93,8 +94,8 @@ namespace ParserHtml.Services.ThreeNineMd
             }
             catch (NullReferenceException e)
             {
-                _logger.Log(LogLevel.Error, $@"Ошибка парсинга Url для ресурса 'SiteItem.Name'. Узел href не найден. {e.Message}",
-                    DateTime.Now);
+                _logger.LogError(e, "Could not parse URL for resource {0}. No href node was found. HtmlNode: {1}", BaseUrl, htmlNode);
+                
                 return string.Empty;
             }
         }
@@ -106,8 +107,10 @@ namespace ParserHtml.Services.ThreeNineMd
 
         private string ParsePrice(HtmlNode htmlNode)
         {
-            return htmlNode.SelectSingleNode(".//*[@class='ads-list-photo-item-price-wrapper']")?
-                .InnerText.Trim();
+            var price = htmlNode.SelectSingleNode(".//*[@class='ads-list-photo-item-price-wrapper']")?
+                            .InnerText.Trim() ?? string.Empty;
+
+            return Regex.Replace(price, @"&nbsp;", " ");
         }
 
         private string ParseDescription(HtmlNode htmlNode)
