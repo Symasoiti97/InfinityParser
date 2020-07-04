@@ -47,8 +47,6 @@ namespace ReaderHtml
                     {
                         var reg = provider.GetService<IRegistration>();
                         regCfg.ConfigureConsumer(reg, typeof(ReaderHtmlConsumer));
-                        //regCfg.UseMessageRetry(e => e.Interval(2, 100));
-                        //EndpointConvention.Map<SiteMessageDto>(regCfg.InputAddress);
                     });
                 });
             });

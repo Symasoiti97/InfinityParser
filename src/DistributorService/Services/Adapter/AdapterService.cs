@@ -101,14 +101,14 @@ namespace DistributorService.Services.Adapter
 
                 try
                 {
-                    //await _dataProvider.Insert(item);
+                    await _dataProvider.Insert(item);
                     insertItem.Add(itemDto);
                 }
                 catch (Exception e)
                 {
                     if (!(e is ObjectAlreadyExistsException))
                     {
-                        _logger.LogWarning($"Ошибка добавления строки: {e.Message}");
+                        _logger.LogError($"Error inserting row in data base: {e.Message}");
                     }
                 }
             }

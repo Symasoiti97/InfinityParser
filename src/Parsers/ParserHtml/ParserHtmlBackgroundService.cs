@@ -20,11 +20,18 @@ namespace ParserHtml
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            _logger.LogInformation("ParserHtml worker running at: {time}", DateTimeOffset.Now);
+            _logger.LogInformation("ParserHtmlService worker running at: {time}", DateTimeOffset.Now);
             
             _busControl.StartAsync(stoppingToken);
 
             return Task.CompletedTask;
+        }
+
+        public override Task StopAsync(CancellationToken cancellationToken)
+        {
+            _logger.LogInformation("ParserHtmlService stopping at: {time}", DateTimeOffset.Now);
+            
+            return base.StopAsync(cancellationToken);
         }
     }
 }

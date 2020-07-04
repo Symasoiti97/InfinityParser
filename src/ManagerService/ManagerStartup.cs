@@ -28,10 +28,10 @@ namespace ManagerService
             ConfigureMassTransit(services);
 
             services.AddAutoMapper((provider, config) => { config.AddProfile(new MapperProfile()); }, new Type[] { }, ServiceLifetime.Transient);
-            
+         
             services.AddEntityFrameworkNpgsql()
                 .AddDbContext<InfinityParserDbContext>(optionsBuilder =>
-                    optionsBuilder.UseNpgsql(configuration.GetConnectionString("Postgres")));
+                    optionsBuilder.UseNpgsql(configuration["ConnectionString:Postgres"]));
             services.AddScoped<IDataProvider, DataProvider>();
 
             services.AddTransient<Timer>();

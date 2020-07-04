@@ -231,3 +231,4 @@ proguard/
 .vs
 *.local.json
 Files
+StartupSettings

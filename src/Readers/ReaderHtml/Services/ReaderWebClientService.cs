@@ -30,7 +30,7 @@ namespace ReaderHtml.Services
             }
             else
             {
-                _logger.LogWarning("httpResponseMessage == null/страница загружена не удачно");
+                _logger.LogWarning("httpResponseMessage == null/page loaded not successfully\tAddress: {0}", address);
             }
             
             return source;
@@ -38,7 +38,7 @@ namespace ReaderHtml.Services
 
         public Task<string> PostAsync(string address)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
     }
 }

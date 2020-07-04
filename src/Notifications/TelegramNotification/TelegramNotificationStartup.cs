@@ -57,8 +57,6 @@ namespace TelegramNotification
                     {
                         var reg = provider.GetService<IRegistration>();
                         regCfg.ConfigureConsumer(reg, typeof(ThreeNineMdTelegramNotificationConsumer));
-                        //regCfg.UseMessageRetry(e => e.Interval(2, 100));
-                        //EndpointConvention.Map<SiteMessageDto>(regCfg.InputAddress);
                     });
                 });
             });

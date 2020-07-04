@@ -37,6 +37,7 @@ namespace TelegramNotification.Services
                 foreach (var item in notifyItems)
                 {
                     await _telegramBotClient.SendTextMessageAsync(chatId, BuildHtmlMessage(item), ParseMode.Html);
+                    _logger.LogInformation("Telegram | ChatId: {0}\t NameObject: {1}", chatId.Identifier, typeof(T).Name);
                 }
             }
         }

@@ -25,7 +25,7 @@ namespace DistributorService.Consumers
 
         public Task Consume(ConsumeContext<DistributorMessageDto> context)
         {
-            _logger.LogInformation("ParserHtml. Date: {0}", DateTimeOffset.Now);
+            _logger.LogInformation("[{0}]:\t{1} - Get Message", DateTimeOffset.Now, typeof(DistributorConsumer).Name);
 
             _adapterService.SaveAndPublishNotify(context.Message.Site, context.Message.ThreeNineMdCollection).GetAwaiter();
 

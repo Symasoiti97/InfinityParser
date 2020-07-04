@@ -28,7 +28,7 @@ namespace ParserHtml.Consumers
 
         public Task Consume(ConsumeContext<HtmlMessageDto> context)
         {
-            _logger.LogInformation("ParserHtml. Date: {0}", DateTimeOffset.Now);
+            _logger.LogInformation("[{0}]:\t{1} - Get Message", DateTimeOffset.Now, typeof(ParserHtmlConsumer).Name);
 
             var items = _parserService.ParseHtmlContent(context.Message.HtmlContent).Result;
 

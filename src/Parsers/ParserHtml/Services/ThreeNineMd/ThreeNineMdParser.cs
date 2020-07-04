@@ -17,7 +17,7 @@ namespace ParserHtml.Services.ThreeNineMd
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
-        
+
         public async Task<IEnumerable<ShortThreeNineMdItem>> ParseHtmlContent(string htmlContent)
         {
             return await ParseItem(htmlContent);
@@ -39,13 +39,12 @@ namespace ParserHtml.Services.ThreeNineMd
                 }
                 catch (Exception e)
                 {
-                    _logger.Log(LogLevel.Error, $"Ошибка парсинга списка для ресурса 'SiteItem.Name'. {e.Message}", DateTime.Now);
-
+                    _logger.LogWarning("[{0}]:\t{1} - Error parsing list for resource {2}\n{3}", DateTimeOffset.Now, typeof(ThreeNineMdParser).Name, BaseUrl.ToString(), e.Message);
                     return Enumerable.Empty<ShortThreeNineMdItem>();
                 }
             });
         }
-        
+
         private HtmlDocument GetHtmlDocument(string sourceContent)
         {
             var htmlDocument = new HtmlDocument();
@@ -53,7 +52,7 @@ namespace ParserHtml.Services.ThreeNineMd
 
             return htmlDocument;
         }
-        
+
         private HtmlNode[] ParseList(HtmlDocument htmlDocument)
         {
             return htmlDocument.GetElementbyId("js-ads-container").Descendants("li").ToArray();
@@ -65,8 +64,6 @@ namespace ParserHtml.Services.ThreeNineMd
             {
                 if (htmlNode == null)
                     return null;
-
-                var p = ParserTitle(htmlNode);
 
                 var item = new ShortThreeNineMdItem
                 {
@@ -91,7 +88,7 @@ namespace ParserHtml.Services.ThreeNineMd
             {
                 var url = htmlNode.SelectSingleNode(".//*[@class='ads-list-photo-item-title ']")
                     .SelectSingleNode("a").Attributes["href"].Value;
-                
+
                 return new Uri(BaseUrl, url).ToString();
             }
             catch (NullReferenceException e)

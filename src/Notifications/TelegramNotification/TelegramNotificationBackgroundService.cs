@@ -22,11 +22,18 @@ namespace TelegramNotification
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
+            _logger.LogInformation("TelegramNotificationService running at: {time}", DateTimeOffset.Now);
 
             _busControl.StartAsync(stoppingToken);
 
             return Task.CompletedTask;
+        }
+
+        public override Task StopAsync(CancellationToken cancellationToken)
+        {
+            _logger.LogInformation("TelegramNotificationService stopping at: {time}", DateTimeOffset.Now);
+            
+            return base.StopAsync(cancellationToken);
         }
     }
 }

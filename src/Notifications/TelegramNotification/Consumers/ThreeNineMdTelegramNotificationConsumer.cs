@@ -23,7 +23,7 @@ namespace TelegramNotification.Consumers
 
         public Task Consume(ConsumeContext<ThreeNineMdTelegramMessageDto> context)
         {
-            _logger.LogInformation("ParserHtml. Date: {0}", DateTimeOffset.Now);
+            _logger.LogInformation("[{0}]:\t{1} - Get Message", DateTimeOffset.Now, typeof(ThreeNineMdTelegramNotificationConsumer).Name);
 
             var message = context.Message;
 

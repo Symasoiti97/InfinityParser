@@ -20,11 +20,17 @@ namespace ReaderHtml
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            _logger.LogInformation("ReadHtml worker running at: {time}", DateTimeOffset.Now);
+            _logger.LogInformation("ReadHtmlService worker running at: {time}", DateTimeOffset.Now);
             
             _busControl.StartAsync(stoppingToken);
 
             return Task.CompletedTask;
+        }
+
+        public override Task StopAsync(CancellationToken cancellationToken)
+        {
+            _logger.LogInformation("ReadHtmlService worker stopping at: {time}", DateTimeOffset.Now);
+            return base.StopAsync(cancellationToken);
         }
     }
 }

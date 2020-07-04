@@ -28,7 +28,7 @@ namespace DistributorService
             ConfigureMassTransit(services);
             
             services.AddDbContext<InfinityParserDbContext>(optionsBuilder =>
-                    optionsBuilder.UseNpgsql(configuration.GetConnectionString("Postgres")));
+                    optionsBuilder.UseNpgsql(configuration["ConnectionString:Postgres"]));
             services.AddScoped<IDataProvider, DataProvider>();
 
             services.AddSingleton<ICacheService, CacheService>();
@@ -54,8 +54,6 @@ namespace DistributorService
                     {
                         var reg = provider.GetService<IRegistration>();
                         regCfg.ConfigureConsumer(reg, typeof(DistributorConsumer));
-                        //regCfg.UseMessageRetry(e => e.Interval(2, 100));
-                        //EndpointConvention.Map<SiteMessageDto>(regCfg.InputAddress);
                     });
                 });
             });

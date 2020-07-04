@@ -57,7 +57,7 @@ namespace ManagerService.Services
                 Site = _site
             });
 
-            _logger.LogInformation($"Send message. Date: {DateTime.Now}", DateTimeOffset.Now);
+            _logger.LogInformation("ParserService: send message. Date: {time}", DateTimeOffset.Now);
         }
     }
 }

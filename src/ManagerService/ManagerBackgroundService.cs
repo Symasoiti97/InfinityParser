@@ -28,34 +28,22 @@ namespace ManagerService
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            _logger.LogInformation("Manager worker running at: {time}", DateTimeOffset.Now);
-                
+            _logger.LogInformation("ManagerService worker running at: {time}", DateTimeOffset.Now);
+
             _busControl.StartAsync(stoppingToken);
-            
+
             var scope = _serviceProvider.CreateScope().ServiceProvider;
             var appStarter = scope.GetService<IApplicationsStarter>();
             appStarter.Start();
-            
+
             return Task.CompletedTask;
         }
-        
-        private void StartServices()
+
+        public override Task StopAsync(CancellationToken cancellationToken)
         {
-            var readerService = new Process {StartInfo = new ProcessStartInfo { }};
-            readerService.Start();
-            readerService.WaitForExit();
+            _logger.LogInformation("ManagerService worker stopping at: {time}", DateTimeOffset.Now);
 
-            var parserService = new Process {StartInfo = new ProcessStartInfo { }};
-            readerService.Start();
-            readerService.WaitForExit();
-
-            var distributorService = new Process {StartInfo = new ProcessStartInfo { }};
-            readerService.Start();
-            readerService.WaitForExit();
-
-            var notificationService = new Process {StartInfo = new ProcessStartInfo { }};
-            readerService.Start();
-            readerService.WaitForExit();
+            return base.StopAsync(cancellationToken);
         }
     }
 }
