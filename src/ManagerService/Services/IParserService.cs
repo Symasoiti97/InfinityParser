@@ -4,8 +4,8 @@ namespace ManagerService.Services
 {
     public interface IParserService
     {
-        void Init(SiteDto site);
-        void StartParsing();
+        void StartParsing(SiteDto site);
+        void RestartParsing();
         void StopParsing();
     }
 }

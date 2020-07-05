@@ -5,6 +5,7 @@ using AutoMapper.QueryableExtensions;
 using Db.Models;
 using Domain.Provider;
 using Dto;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ManagerService.Services
@@ -25,19 +26,16 @@ namespace ManagerService.Services
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
-        public Task Start()
+        public async Task Start()
         {
-            var sites = _dataProvider.Get<SiteDb>().ProjectTo<SiteDto>(_mapper.ConfigurationProvider);
+            var sites = await _dataProvider.Get<SiteDb>().ProjectTo<SiteDto>(_mapper.ConfigurationProvider).ToArrayAsync();
             
             var scope = _serviceProvider.CreateScope();
             foreach (var site in sites)
             {
                 var parser = scope.ServiceProvider.GetService<IParserService>();
-                parser.Init(site);
-                parser.StartParsing();
+                parser.StartParsing(site);
             }
-            
-            return Task.CompletedTask;
         }
     }
 }

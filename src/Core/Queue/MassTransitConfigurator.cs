@@ -22,9 +22,6 @@ namespace Queue
                 var uri = new UriBuilder("rabbitmq", rabbitMqOptions.Host, rabbitMqOptions.Port).Uri;
                 configurator.Host(uri, hostConfigurator => { });
 
-                //configurator.AutoDelete = false;
-                //configurator.Durable = true;
-                
                 register(provider, configurator);
             });
 

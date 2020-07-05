@@ -120,11 +120,6 @@ namespace Domain.Provider
                     throw new ObjectAlreadyExistsException(message, ex);
                 }
 
-                // if (ex.SqlState == "40001")
-                // {
-                //     throw new ConcurrentModifyException(message, ex);
-                // }
-
                 throw new PostgreSqlException(ex.SqlState, message, ex);
             }
         }

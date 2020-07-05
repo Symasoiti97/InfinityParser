@@ -9,6 +9,7 @@ namespace ManagerService.Services
 {
     public class ParserService : IParserService
     {
+        private readonly Random _random;
         private readonly Timer _timer;
         private readonly IMassTransitCenter _massTransitCenter;
         private readonly ILogger<ParserService> _logger;
@@ -22,21 +23,26 @@ namespace ManagerService.Services
             _massTransitCenter = massTransitCenter ?? throw new ArgumentNullException(nameof(massTransitCenter));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _timer = timer ?? throw new ArgumentNullException(nameof(timer));
-        }
-
-        public void Init(SiteDto site)
-        {
-            _site = site;
             _timer.Elapsed += TimerOnElapsed;
-            var interval = new Random().Next(_site.IntervalFrom, _site.IntervalTo);
-            _timer.Interval = TimeSpan.FromSeconds(interval).TotalMilliseconds;
+            _random = new Random();
         }
+        
+        public void StartParsing(SiteDto site)
+        {
+            _site = site ?? throw new ArgumentNullException(nameof(_site));
 
-        public void StartParsing()
+            SetTimerIntervalBySite();
+            
+            PublishMessage();
+            
+            _timer.Start();
+        }
+        
+        public void RestartParsing()
         {
             if(_site == null) throw new ArgumentNullException(nameof(_site));
             
-            PublishMessage();
+            SetTimerIntervalBySite();
             
             _timer.Start();
         }
@@ -48,7 +54,11 @@ namespace ManagerService.Services
 
         private void TimerOnElapsed(object sender, ElapsedEventArgs e)
         {
+            StopParsing();
+            
             PublishMessage();
+
+            RestartParsing();
         }
 
         private void PublishMessage()
@@ -59,6 +69,12 @@ namespace ManagerService.Services
             });
 
             _logger.LogInformation("ParserService: send message. Site: {0}", _site);
+        }
+
+        private void SetTimerIntervalBySite()
+        {
+            var interval = _random.Next(_site.IntervalFrom, _site.IntervalTo);
+            _timer.Interval = TimeSpan.FromSeconds(interval).TotalMilliseconds;
         }
     }
 }

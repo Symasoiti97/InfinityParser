@@ -18,12 +18,12 @@ namespace ReaderHtml.Services
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
         }
-        
+
         public async Task<string> GetAsync(string address)
         {
             var httpResponseMessage = await _httpClient.GetAsync(address);
             var source = string.Empty;
-            
+
             if (httpResponseMessage != null && httpResponseMessage.StatusCode == HttpStatusCode.OK)
             {
                 source = await httpResponseMessage.Content.ReadAsStringAsync();
@@ -32,13 +32,8 @@ namespace ReaderHtml.Services
             {
                 _logger.LogWarning("httpResponseMessage == null/page loaded not successfully\tAddress: {0}", address);
             }
-            
-            return source;
-        }
 
-        public Task<string> PostAsync(string address)
-        {
-            throw new NotImplementedException();
+            return source;
         }
     }
 }

@@ -33,7 +33,6 @@ namespace TelegramNotification
 
                 return new TelegramBotClient(tokenBot.TokenBot, new HttpClient());
             });
-
             services.AddTransient<ITelegramService, TelegramService>();
 
             services.AddHostedService<TelegramNotificationBackgroundService>();
