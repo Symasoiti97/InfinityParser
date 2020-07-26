@@ -40,7 +40,7 @@ namespace TelegramNotification.Services
                     try
                     {
                         await _telegramBotClient.SendTextMessageAsync(chatId, BuildHtmlMessage(item), ParseMode.Html);
-                        _logger.LogInformation("Telegram | ChatId: {0}\t NameObject: {1}", chatId.Identifier, typeof(T).Name);
+                        _logger.LogInformation("Telegram send notification | ChatId: {0}\t NameObject: {1}", chatId.Identifier, typeof(T).Name);
                     }
                     catch (Exception e)
                     {

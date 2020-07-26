@@ -27,7 +27,7 @@ namespace ManagerService
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            _logger.LogInformation("ManagerService worker running at: {time}", DateTimeOffset.Now);
+            _logger.LogInformation("ManagerService worker running");
 
             _busControl.StartAsync(stoppingToken);
 
@@ -40,7 +40,7 @@ namespace ManagerService
 
         public override Task StopAsync(CancellationToken cancellationToken)
         {
-            _logger.LogInformation("ManagerService worker stopping at: {time}", DateTimeOffset.Now);
+            _logger.LogInformation("ManagerService worker stopping");
 
             return base.StopAsync(cancellationToken);
         }
