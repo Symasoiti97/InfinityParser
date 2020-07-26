@@ -55,7 +55,7 @@ namespace TelegramNotification
                     register.ReceiveEndpoint("telegram-notify", regCfg =>
                     {
                         var reg = provider.GetService<IRegistration>();
-                        regCfg.ConfigureConsumer(reg, typeof(ThreeNineMdTelegramNotificationConsumer));
+                        regCfg.ConfigureConsumer(reg, typeof(TelegramNotificationConsumer));
                     });
                 });
             });
@@ -65,7 +65,7 @@ namespace TelegramNotification
 
         private static void RegisterConsumers(this IServiceCollectionConfigurator servicesConfigurator)
         {
-            servicesConfigurator.AddConsumer<ThreeNineMdTelegramNotificationConsumer>();
+            servicesConfigurator.AddConsumer<TelegramNotificationConsumer>();
         }
     }
 }

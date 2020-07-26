@@ -1,7 +1,11 @@
-﻿namespace Dto.QueueMessages.Telegram
+﻿using System.Collections.Generic;
+
+namespace Dto.QueueMessages.Telegram
 {
-    public abstract class TelegramMessageDto
+    public class TelegramMessageDto<T>
     {
         public string ChatId { get; set; }
+
+        public IEnumerable<T> Items { get; set; }
     }
 }

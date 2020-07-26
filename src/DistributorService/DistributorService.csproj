@@ -18,4 +18,13 @@
       <ProjectReference Include="..\Core\Logger\Logger.csproj" />
       <ProjectReference Include="..\Core\Queue\Queue.csproj" />
     </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="Services\Adapter\AdapterService.cs">
+        <DependentUpon>IAdapterService.cs</DependentUpon>
+      </Compile>
+      <Compile Update="Services\Cache\CacheService.cs">
+        <DependentUpon>ICacheService.cs</DependentUpon>
+      </Compile>
+    </ItemGroup>
 </Project>

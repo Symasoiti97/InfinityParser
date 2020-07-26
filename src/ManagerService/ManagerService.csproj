@@ -21,4 +21,13 @@
       <ProjectReference Include="..\Core\Logger\Logger.csproj" />
       <ProjectReference Include="..\Core\Queue\Queue.csproj" />
     </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="Services\ApplicationStarter.cs">
+        <DependentUpon>IApplicationsStarter.cs</DependentUpon>
+      </Compile>
+      <Compile Update="Services\ParserService.cs">
+        <DependentUpon>IParserService.cs</DependentUpon>
+      </Compile>
+    </ItemGroup>
 </Project>

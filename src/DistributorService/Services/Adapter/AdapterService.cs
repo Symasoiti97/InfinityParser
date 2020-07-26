@@ -8,7 +8,6 @@ using Domain.Provider;
 using Dto;
 using Dto.Common;
 using Dto.QueueMessages.Telegram;
-using Dto.ThreeNineMd;
 using Helper.Exceptions;
 using MassTransit;
 using Microsoft.Extensions.Logging;
@@ -69,22 +68,16 @@ namespace DistributorService.Services.Adapter
             }
         }
 
-        private async Task TelegramServicePublish<T>(string chatId, T[] items)
+        private async Task TelegramServicePublish<T>(string chatId, IReadOnlyCollection<T> items)
         {
-            if (typeof(T) == typeof(ShortThreeNineMdItem))
+            var message = new TelegramMessageDto<T>()
             {
-                var message = new ThreeNineMdTelegramMessageDto
-                {
-                    ChatId = chatId,
-                    Items = items.Cast<ShortThreeNineMdItem>()
-                };
-                await _publishEndpoint.Publish(message);
-                _logger.LogInformation("Telegram service publish ChatId: {0}\nCount item: {1}", chatId, items.Length);
-            }
-            else
-            {
-                _logger.LogError("Telegram service publish ChatId: {0}\nCount item: {1}", chatId, items.Length);
-            }
+                ChatId = chatId,
+                Items = items
+            };
+
+            await _publishEndpoint.Publish(message);
+            _logger.LogInformation("Telegram service publish ChatId: {0}\tType: {1}\tCount item: {2}", chatId, nameof(T), items.Count);
         }
 
         private async Task<IEnumerable<T>> InsertAndGetItems<T>(Guid siteId, IEnumerable<T> items) where T : ItemDto

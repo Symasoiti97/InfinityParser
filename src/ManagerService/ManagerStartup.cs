@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Queue;
 using AutoMapper;
+using Dto.ThreeNineMd;
 using Helper.Mappers;
 
 namespace ManagerService
@@ -35,7 +36,7 @@ namespace ManagerService
             services.AddScoped<IDataProvider, DataProvider>();
 
             services.AddTransient<Timer>();
-            services.AddTransient<IParserService, ParserService>();
+            services.AddTransient<ParserService<ShortThreeNineMdItem>>();
             services.AddTransient<IApplicationsStarter, ApplicationStarter>();
         }
 

@@ -16,4 +16,10 @@
       <ProjectReference Include="..\..\Core\Logger\Logger.csproj" />
       <ProjectReference Include="..\..\Core\Queue\Queue.csproj" />
     </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="Services\TelegramService.cs">
+        <DependentUpon>ITelegramService.cs</DependentUpon>
+      </Compile>
+    </ItemGroup>
 </Project>

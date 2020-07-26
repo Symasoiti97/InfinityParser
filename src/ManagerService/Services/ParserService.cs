@@ -7,18 +7,18 @@ using Queue;
 
 namespace ManagerService.Services
 {
-    public class ParserService : IParserService
+    public class ParserService<T> : IParserService where T: class
     {
         private readonly Random _random;
         private readonly Timer _timer;
         private readonly IMassTransitCenter _massTransitCenter;
-        private readonly ILogger<ParserService> _logger;
+        private readonly ILogger<ParserService<T>> _logger;
         private SiteDto _site;
 
         public ParserService(
             Timer timer,
             IMassTransitCenter massTransitCenter,
-            ILogger<ParserService> logger)
+            ILogger<ParserService<T>> logger)
         {
             _massTransitCenter = massTransitCenter ?? throw new ArgumentNullException(nameof(massTransitCenter));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -63,7 +63,7 @@ namespace ManagerService.Services
 
         private void PublishMessage()
         {
-            _massTransitCenter.Publish(new SiteMessageDto
+            _massTransitCenter.Publish(new SiteMessageDto<T>
             {
                 Site = _site
             });

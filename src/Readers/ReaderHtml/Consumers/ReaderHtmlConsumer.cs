@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Dto.QueueMessages;
+using Dto.ThreeNineMd;
 using MassTransit;
 using Microsoft.Extensions.Logging;
 using ReaderHtml.Services;
 
 namespace ReaderHtml.Consumers
 {
-    public class ReaderHtmlConsumer : IConsumer<SiteMessageDto>
+    public class ReaderHtmlConsumer : IConsumer<SiteMessageDto<ShortThreeNineMdItem>>
     {
         private readonly ILogger<ReaderHtmlConsumer> _logger;
         private readonly IReaderHtmlService _readerHtmlService;
@@ -23,7 +24,7 @@ namespace ReaderHtml.Consumers
             _publishEndpoint = publishEndpoint ?? throw new ArgumentNullException(nameof(publishEndpoint));
         }
 
-        public Task Consume(ConsumeContext<SiteMessageDto> context)
+        public Task Consume(ConsumeContext<SiteMessageDto<ShortThreeNineMdItem>> context)
         {
             var site = context.Message.Site;
             
@@ -31,7 +32,7 @@ namespace ReaderHtml.Consumers
 
             var htmlContent = _readerHtmlService.GetAsync(site.Url).Result;
 
-            _publishEndpoint.Publish(new HtmlMessageDto
+            _publishEndpoint.Publish(new HtmlMessageDto<ShortThreeNineMdItem>
             {
                 Site = site,
                 HtmlContent = htmlContent

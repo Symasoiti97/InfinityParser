@@ -1,7 +1,9 @@
 ﻿namespace Dto
 {
-    public class ItemDto
+    public abstract class ItemDto
     {
         public string Url { get; set; }
+
+        public abstract string HtmlMessage();
     }
 }

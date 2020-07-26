@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Dto.ThreeNineMd;
+using Dto;
 using Microsoft.Extensions.Logging;
 using Telegram.Bot;
 using Telegram.Bot.Types;
@@ -28,7 +28,8 @@ namespace TelegramNotification.Services
         public async Task SendMessages<T>(ChatId chatId, IEnumerable<T> items) where T : class
         {
             if (chatId == null) throw new ArgumentNullException(nameof(chatId));
-
+            if (items == null) throw new ArgumentNullException(nameof(items));
+            
             var count = items.Count() / PublishItemCount;
 
             for (var i = 0; i <= count; i++)
@@ -39,7 +40,7 @@ namespace TelegramNotification.Services
                 {
                     try
                     {
-                        await _telegramBotClient.SendTextMessageAsync(chatId, BuildHtmlMessage(item), ParseMode.Html);
+                        await _telegramBotClient.SendTextMessageAsync(chatId, (item as ItemDto)?.HtmlMessage(), ParseMode.Html);
                         _logger.LogInformation("Telegram send notification | ChatId: {0}\t NameObject: {1}", chatId.Identifier, typeof(T).Name);
                     }
                     catch (Exception e)
@@ -49,18 +50,6 @@ namespace TelegramNotification.Services
                 }
 
                 await Task.Delay(TimePeriod);
-            }
-        }
-
-        private static string BuildHtmlMessage<T>(T obj) where T : class
-        {
-            if (obj is ShortThreeNineMdItem item)
-            {
-                return $"<b>{item.Title}</b>\nЦена: {item.Price}\nКраткое описание: {item.ShortDescription}\n<a href=\"{item.Url}\">{item.Url}</a>";
-            }
-            else
-            {
-                throw new ArgumentException($"Тип {obj.GetType().Name} не поддерживается", nameof(obj));
             }
         }
     }

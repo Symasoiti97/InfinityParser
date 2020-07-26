@@ -9,7 +9,7 @@ using ParserHtml.Services;
 
 namespace ParserHtml.Consumers
 {
-    public class ParserHtmlConsumer : IConsumer<HtmlMessageDto>
+    public class ParserHtmlConsumer : IConsumer<HtmlMessageDto<ShortThreeNineMdItem>>
     {
         private readonly ILogger<ParserHtmlConsumer> _logger;
         private readonly IParserService<IEnumerable<ShortThreeNineMdItem>> _parserService;
@@ -25,7 +25,7 @@ namespace ParserHtml.Consumers
             _publishEndpoint = publishEndpoint ?? throw new ArgumentNullException(nameof(publishEndpoint));
         }
 
-        public Task Consume(ConsumeContext<HtmlMessageDto> context)
+        public Task Consume(ConsumeContext<HtmlMessageDto<ShortThreeNineMdItem>> context)
         {
             _logger.LogInformation("{0} - Get Message", typeof(ParserHtmlConsumer).Name);
 
