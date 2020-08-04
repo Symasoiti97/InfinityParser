@@ -115,9 +115,9 @@ namespace ParserHtml.Services.ThreeNineMd
 
         private string ParseDescription(HtmlNode htmlNode)
         {
-            return htmlNode.SelectSingleNode(".//*[@class=' ads-list-photo-item-price ']")?
-                .SelectSingleNode(".//*[@class='is-offer-type']")
-                .ChildNodes["span"]?.InnerText.Trim();
+            return htmlNode?.SelectSingleNode(".//*[@class=' ads-list-photo-item-price ']")?
+                .SelectSingleNode(".//*[@class='is-offer-type']")?
+                .ChildNodes["span"]?.InnerText?.Trim();
         }
     }
 }

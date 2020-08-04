@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Dto.QueueMessages;
-using Dto.ThreeNineMd;
 using MassTransit;
 using Microsoft.Extensions.Logging;
 using ReaderHtml.Services;
 
 namespace ReaderHtml.Consumers
 {
-    public class ReaderHtmlConsumer : IConsumer<SiteMessageDto<ShortThreeNineMdItem>>
+    public class ReaderHtmlConsumer : IConsumer<SiteMessageDto>
     {
         private readonly ILogger<ReaderHtmlConsumer> _logger;
         private readonly IReaderHtmlService _readerHtmlService;
@@ -24,20 +23,20 @@ namespace ReaderHtml.Consumers
             _publishEndpoint = publishEndpoint ?? throw new ArgumentNullException(nameof(publishEndpoint));
         }
 
-        public Task Consume(ConsumeContext<SiteMessageDto<ShortThreeNineMdItem>> context)
+        public Task Consume(ConsumeContext<SiteMessageDto> context)
         {
-            var site = context.Message.Site;
-            
-            _logger.LogInformation("{0} : Url: {1} | ItemType: {2}", typeof(ReaderHtmlConsumer).Name, site.Url, site.ItemType);
+            var message = context.Message;
 
-            var htmlContent = _readerHtmlService.GetAsync(site.Url).Result;
+            _logger.LogInformation("{0} : Url: {1} | ItemType: {2}", typeof(ReaderHtmlConsumer).Name, message.Site.Url, message.ItemType);
 
-            _publishEndpoint.Publish(new HtmlMessageDto<ShortThreeNineMdItem>
+            var htmlContent = _readerHtmlService.GetAsync(message.Site.Url).Result;
+
+            _publishEndpoint.Publish(new HtmlMessageDto
             {
-                Site = site,
+                Site = message.Site,
                 HtmlContent = htmlContent
             });
-            
+
             return Task.CompletedTask;
         }
     }

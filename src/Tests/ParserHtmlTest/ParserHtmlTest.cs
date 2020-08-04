@@ -1,4 +1,7 @@
+using System;
 using System.Net.Http;
+using Dto.Fl;
+using Dto.ThreeNineMd;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NUnit.Framework;
@@ -29,8 +32,22 @@ namespace ParserHtmlTest
             var loggerParser = new Logger<ThreeNineMdParser>(factory);
             var parser = new ThreeNineMdParser(loggerParser);
 
-            var content = reader.GetAsync("https://999.md/ru/list/transport/cars?selected_currency=original").Result;        
+            var content = reader.GetAsync("https://999.md/ru/list/transport/cars?selected_currency=original").Result;
             var items = parser.ParseHtmlContent(content).Result;
+
+            Assert.Pass();
+        }
+
+        [Test]
+        public void Test_GetTypeName()
+        {
+            var typeShortThreeNineMd = typeof(ShortThreeNineMdItem);
+            var nameShortThreeNineMd = typeShortThreeNineMd.AssemblyQualifiedName;
+            var typeShortThreeNineMdByName = Type.GetType(nameShortThreeNineMd);
+
+            var typeFlItem = typeof(FlItem);
+            var nameFlItem = typeFlItem.AssemblyQualifiedName;
+            var typeFlItemByName = Type.GetType(nameFlItem);
 
             Assert.Pass();
         }

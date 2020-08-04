@@ -24,7 +24,7 @@ namespace DistributorService.Consumers
         {
             _logger.LogInformation("{0} - Get Message", typeof(DistributorConsumer).Name);
 
-            _adapterService.SaveAndPublishNotify(context.Message.Site, context.Message.ThreeNineMdCollection).GetAwaiter();
+            _adapterService.SaveAndPublishNotify(context.Message.Site, context.Message.Items).GetAwaiter();
 
             return Task.CompletedTask;
         }

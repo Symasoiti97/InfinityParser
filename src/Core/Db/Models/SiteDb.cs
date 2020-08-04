@@ -11,6 +11,7 @@ namespace Db.Models
         public DateTime CreateDate { get; set; }
         public string Url { get; set; }
         public ItemType ItemType { get; set; }
+        public string ItemClass { get; set; }
         public int IntervalFrom { get; set; }
         public int IntervalTo { get; set; }
         public string Notifications { get; set; }

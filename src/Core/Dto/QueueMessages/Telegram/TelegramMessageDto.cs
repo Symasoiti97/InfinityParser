@@ -2,10 +2,9 @@
 
 namespace Dto.QueueMessages.Telegram
 {
-    public class TelegramMessageDto<T>
+    public class TelegramMessageDto
     {
         public string ChatId { get; set; }
-
-        public IEnumerable<T> Items { get; set; }
+        public IEnumerable<ItemDto> Items { get; set; }
     }
 }

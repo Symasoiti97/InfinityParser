@@ -3,10 +3,8 @@ using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Db.Models;
-using Db.Models.Common;
 using Domain.Provider;
 using Dto;
-using Dto.ThreeNineMd;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -35,20 +33,14 @@ namespace ManagerService.Services
             var scope = _serviceProvider.CreateScope();
             foreach (var site in sites)
             {
-                var parser = (IParserService) scope.ServiceProvider.GetRequiredService(GetTypeParser(site.ItemType));
+                var parser = (IParserService) scope.ServiceProvider.GetRequiredService(GetTypeParser(site.ItemClass));
                 parser.StartParsing(site);
             }
         }
 
-        private static Type GetTypeParser(ItemType itemType)
+        private static Type GetTypeParser(Type itemClass)
         {
-            switch (itemType)
-            {
-                case ItemType.ShortThreeNineMdItem:
-                    return typeof(ParserService<ShortThreeNineMdItem>);
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(itemType), itemType, null);
-            }
+            return typeof(ParserService<>).MakeGenericType(itemClass);
         }
     }
 }

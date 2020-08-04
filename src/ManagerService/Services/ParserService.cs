@@ -63,9 +63,10 @@ namespace ManagerService.Services
 
         private void PublishMessage()
         {
-            _massTransitCenter.Publish(new SiteMessageDto<T>
+            _massTransitCenter.Publish(new SiteMessageDto
             {
-                Site = _site
+                Site = _site,
+                ItemType = typeof(T)
             });
 
             _logger.LogInformation("ParserService: send message. Site: {0}", _site);
