@@ -7,7 +7,7 @@ using DistributorService.Services.Cache;
 using Domain.Provider;
 using Dto;
 using Dto.Common;
-using Dto.QueueMessages.Telegram;
+using Dto.QueueMessages;
 using Helper.Exceptions;
 using MassTransit;
 using Microsoft.Extensions.Logging;
@@ -48,18 +48,18 @@ namespace DistributorService.Services.Adapter
 
             if (notifyItems.Any())
             {
-                await PublishNotifications(notifyItems, site.Notifications);
+                await PublishNotifications(notifyItems, site.Notifications, site);
             }
         }
 
-        private async Task PublishNotifications(IReadOnlyCollection<ItemDto> items, IDictionary<NotificationType, string> notifications)
+        private async Task PublishNotifications(IReadOnlyCollection<ItemDto> items, IDictionary<NotificationType, string> notifications, SiteDto site)
         {
             foreach (var (key, value) in notifications)
             {
                 switch (key)
                 {
                     case NotificationType.Telegram:
-                        await TelegramServicePublish(value, items);
+                        await TelegramServicePublish(value, items, site);
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();
@@ -67,12 +67,13 @@ namespace DistributorService.Services.Adapter
             }
         }
 
-        private async Task TelegramServicePublish(string chatId, IReadOnlyCollection<ItemDto> items)
+        private async Task TelegramServicePublish(string chatId, IReadOnlyCollection<ItemDto> items, SiteDto site)
         {
             var message = new TelegramMessageDto
             {
                 ChatId = chatId,
-                Items = items
+                Items = items,
+                Site = site
             };
 
             await _publishEndpoint.Publish(message);

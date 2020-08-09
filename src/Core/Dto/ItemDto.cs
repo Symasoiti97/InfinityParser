@@ -1,12 +1,9 @@
 ﻿namespace Dto
 {
-    public class ItemDto
+    public abstract class ItemDto
     {
         public string Url { get; set; }
 
-        public virtual string HtmlMessage()
-        {
-            return $"<a href=\"{Url}\">{Url}</a>";
-        }
+        public abstract string HtmlMessage();
     }
 }

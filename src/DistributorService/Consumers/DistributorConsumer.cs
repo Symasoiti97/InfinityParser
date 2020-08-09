@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using DistributorService.Services.Adapter;
 using Dto.QueueMessages;
+using Helper.Extensions;
 using MassTransit;
 using Microsoft.Extensions.Logging;
 
@@ -24,7 +25,10 @@ namespace DistributorService.Consumers
         {
             _logger.LogInformation("{0} - Get Message", typeof(DistributorConsumer).Name);
 
-            _adapterService.SaveAndPublishNotify(context.Message.Site, context.Message.Items).GetAwaiter();
+            var message = context.Message;
+            var items = message.Items.ToObject(message.Site.ItemClass.ToEnumerableType());
+
+            _adapterService.SaveAndPublishNotify(message.Site, items).GetAwaiter();
 
             return Task.CompletedTask;
         }

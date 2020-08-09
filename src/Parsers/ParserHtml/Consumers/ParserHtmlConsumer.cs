@@ -30,7 +30,7 @@ namespace ParserHtml.Consumers
 
             var parserService = GetParserHtmlService(context.Message.Site.ItemClass);
             var items = parserService.ParseHtmlContent(context.Message.HtmlContent).Result;
-
+            
             _publishEndpoint.Publish(new DistributorMessageDto
             {
                 Items = items,

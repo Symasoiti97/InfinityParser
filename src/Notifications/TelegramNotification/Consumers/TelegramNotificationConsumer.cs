@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Dto.QueueMessages.Telegram;
+using Dto.QueueMessages;
+using Helper.Extensions;
 using MassTransit;
 using Microsoft.Extensions.Logging;
 using Telegram.Bot.Types;
@@ -26,8 +27,9 @@ namespace TelegramNotification.Consumers
             _logger.LogInformation("{0} - Get Message", typeof(TelegramNotificationConsumer).Name);
 
             var message = context.Message;
+            var items = message.Items.ToObject(message.Site.ItemClass.ToEnumerableType());
 
-            _telegramService.SendMessages(new ChatId(message.ChatId), message.Items);
+            _telegramService.SendMessages(new ChatId(message.ChatId), items);
 
             return Task.CompletedTask;
         }

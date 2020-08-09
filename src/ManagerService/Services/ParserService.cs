@@ -7,18 +7,18 @@ using Queue;
 
 namespace ManagerService.Services
 {
-    public class ParserService<T> : IParserService where T: class
+    public class ParserService : IParserService
     {
         private readonly Random _random;
         private readonly Timer _timer;
         private readonly IMassTransitCenter _massTransitCenter;
-        private readonly ILogger<ParserService<T>> _logger;
+        private readonly ILogger<ParserService> _logger;
         private SiteDto _site;
 
         public ParserService(
             Timer timer,
             IMassTransitCenter massTransitCenter,
-            ILogger<ParserService<T>> logger)
+            ILogger<ParserService> logger)
         {
             _massTransitCenter = massTransitCenter ?? throw new ArgumentNullException(nameof(massTransitCenter));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -26,24 +26,24 @@ namespace ManagerService.Services
             _timer.Elapsed += TimerOnElapsed;
             _random = new Random();
         }
-        
+
         public void StartParsing(SiteDto site)
         {
             _site = site ?? throw new ArgumentNullException(nameof(_site));
 
             SetTimerIntervalBySite();
-            
+
             PublishMessage();
-            
+
             _timer.Start();
         }
-        
+
         public void RestartParsing()
         {
-            if(_site == null) throw new ArgumentNullException(nameof(_site));
-            
+            if (_site == null) throw new ArgumentNullException(nameof(_site));
+
             SetTimerIntervalBySite();
-            
+
             _timer.Start();
         }
 
@@ -55,7 +55,7 @@ namespace ManagerService.Services
         private void TimerOnElapsed(object sender, ElapsedEventArgs e)
         {
             StopParsing();
-            
+
             PublishMessage();
 
             RestartParsing();
@@ -65,8 +65,7 @@ namespace ManagerService.Services
         {
             _massTransitCenter.Publish(new SiteMessageDto
             {
-                Site = _site,
-                ItemType = typeof(T)
+                Site = _site
             });
 
             _logger.LogInformation("ParserService: send message. Site: {0}", _site);

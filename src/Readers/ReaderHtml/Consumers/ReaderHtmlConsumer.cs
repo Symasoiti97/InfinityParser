@@ -27,7 +27,7 @@ namespace ReaderHtml.Consumers
         {
             var message = context.Message;
 
-            _logger.LogInformation("{0} : Url: {1} | ItemType: {2}", typeof(ReaderHtmlConsumer).Name, message.Site.Url, message.ItemType);
+            _logger.LogInformation("{0} : Url: {1} | ItemType: {2}", typeof(ReaderHtmlConsumer).Name, message.Site.Url, message.Site.ItemClass);
 
             var htmlContent = _readerHtmlService.GetAsync(message.Site.Url).Result;
 

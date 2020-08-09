@@ -10,7 +10,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Queue;
 using AutoMapper;
-using Dto.ThreeNineMd;
 using Helper.Mappers;
 
 namespace ManagerService
@@ -29,14 +28,14 @@ namespace ManagerService
             ConfigureMassTransit(services);
 
             services.AddAutoMapper((provider, config) => { config.AddProfile(new MapperProfile()); }, new Type[] { }, ServiceLifetime.Transient);
-         
+
             services.AddEntityFrameworkNpgsql()
                 .AddDbContext<InfinityParserDbContext>(optionsBuilder =>
                     optionsBuilder.UseNpgsql(configuration["ConnectionString:Postgres"]));
             services.AddScoped<IDataProvider, DataProvider>();
 
             services.AddTransient<Timer>();
-            services.AddTransient<ParserService<ShortThreeNineMdItem>>();
+            services.AddTransient<IParserService, ParserService>();
             services.AddTransient<IApplicationsStarter, ApplicationStarter>();
         }
 

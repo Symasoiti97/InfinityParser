@@ -33,14 +33,9 @@ namespace ManagerService.Services
             var scope = _serviceProvider.CreateScope();
             foreach (var site in sites)
             {
-                var parser = (IParserService) scope.ServiceProvider.GetRequiredService(GetTypeParser(site.ItemClass));
+                var parser = scope.ServiceProvider.GetService<IParserService>();
                 parser.StartParsing(site);
             }
-        }
-
-        private static Type GetTypeParser(Type itemClass)
-        {
-            return typeof(ParserService<>).MakeGenericType(itemClass);
         }
     }
 }
