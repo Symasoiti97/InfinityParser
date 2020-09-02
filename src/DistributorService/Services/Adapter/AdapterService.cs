@@ -39,63 +39,26 @@ namespace DistributorService.Services.Adapter
 
             var uncachedItems = _cacheService.SaveAndGetUncached(site.Id, items).ToArray();
 
-            var notifyItems = Array.Empty<T>();
-
             if (uncachedItems.Any())
             {
-                notifyItems = (await InsertAndGetItems(site.Id, uncachedItems)).ToArray();
-            }
-
-            if (notifyItems.Any())
-            {
-                await PublishNotifications(notifyItems, site.Notifications, site);
+                await SaveAndPublishNotification(site, uncachedItems);
             }
         }
 
-        private async Task PublishNotifications(IReadOnlyCollection<ItemDto> items, IDictionary<NotificationType, string> notifications, SiteDto site)
+        private async Task SaveAndPublishNotification<T>(SiteDto site, IEnumerable<T> items) where T : ItemDto
         {
-            foreach (var (key, value) in notifications)
-            {
-                switch (key)
-                {
-                    case NotificationType.Telegram:
-                        await TelegramServicePublish(value, items, site);
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
-            }
-        }
-
-        private async Task TelegramServicePublish(string chatId, IReadOnlyCollection<ItemDto> items, SiteDto site)
-        {
-            var message = new TelegramMessageDto
-            {
-                ChatId = chatId,
-                Items = items,
-                Site = site
-            };
-
-            await _publishEndpoint.Publish(message);
-            _logger.LogInformation("Telegram service publish ChatId: {0}\tType: {1}\tCount item: {2}", chatId, nameof(items), items.Count);
-        }
-
-        private async Task<IEnumerable<T>> InsertAndGetItems<T>(Guid siteId, IEnumerable<T> items) where T : ItemDto
-        {
-            var insertItem = new List<T>();
-
             foreach (var itemDto in items)
             {
                 var item = new ItemDb
                 {
-                    SiteId = siteId,
+                    SiteId = site.Id,
                     Url = itemDto.Url
                 };
 
                 try
                 {
                     await _dataProvider.Insert(item);
-                    insertItem.Add(itemDto);
+                    await PublishNotifications(itemDto, site);
                 }
                 catch (Exception e)
                 {
@@ -105,8 +68,34 @@ namespace DistributorService.Services.Adapter
                     }
                 }
             }
+        }
 
-            return insertItem;
+        private async Task PublishNotifications(ItemDto item, SiteDto site)
+        {
+            foreach (var (key, value) in site.Notifications)
+            {
+                switch (key)
+                {
+                    case NotificationType.Telegram:
+                        await TelegramServicePublish(value, item, site);
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
+        }
+
+        private async Task TelegramServicePublish(string chatId, ItemDto item, SiteDto site)
+        {
+            var message = new TelegramMessageDto
+            {
+                ChatId = chatId,
+                Items = item,
+                Site = site
+            };
+
+            await _publishEndpoint.Publish(message);
+            _logger.LogInformation("Telegram service publish ChatId: {0}\tType: {1}\tItem: {2}", chatId, nameof(item), item.ToString());
         }
     }
 }
