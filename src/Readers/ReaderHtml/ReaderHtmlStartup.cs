@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Net.Http;
 using MassTransit;
-using MassTransit.ExtensionsDependencyInjectionIntegration;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -26,7 +25,7 @@ namespace ReaderHtml
 
             services.AddTransient<HttpClient>();
             services.AddTransient<IReaderHtmlService, ReaderWebClientService>();
-            
+
             services.AddHostedService<ReaderHtmlBackgroundService>();
         }
 
@@ -39,24 +38,12 @@ namespace ReaderHtml
         {
             services.AddMassTransit(cfg =>
             {
-                cfg.RegisterConsumers();
+                cfg.AddConsumer<ReaderHtmlConsumer>();
 
-                cfg.RegisterBus((provider, register) =>
-                {
-                    register.ReceiveEndpoint("reader-html", regCfg =>
-                    {
-                        var reg = provider.GetService<IRegistration>();
-                        regCfg.ConfigureConsumer(reg, typeof(ReaderHtmlConsumer));
-                    });
-                });
+                cfg.RegisterBus((provider, register) => { register.ReceiveEndpoint<ReaderHtmlConsumer>(provider); });
             });
 
             services.AddScoped<IMassTransitCenter, MassTransitCenter>();
-        }
-
-        private static void RegisterConsumers(this IServiceCollectionConfigurator servicesConfigurator)
-        {
-            servicesConfigurator.AddConsumer<ReaderHtmlConsumer>();
         }
     }
 }

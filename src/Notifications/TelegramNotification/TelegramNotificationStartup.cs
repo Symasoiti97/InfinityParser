@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Net.Http;
 using MassTransit;
-using MassTransit.ExtensionsDependencyInjectionIntegration;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -48,24 +47,12 @@ namespace TelegramNotification
         {
             services.AddMassTransit(cfg =>
             {
-                cfg.RegisterConsumers();
+                cfg.AddConsumer<TelegramNotificationConsumer>();
 
-                cfg.RegisterBus((provider, register) =>
-                {
-                    register.ReceiveEndpoint("telegram-notify", regCfg =>
-                    {
-                        var reg = provider.GetService<IRegistration>();
-                        regCfg.ConfigureConsumer(reg, typeof(TelegramNotificationConsumer));
-                    });
-                });
+                cfg.RegisterBus((provider, register) => { register.ReceiveEndpoint<TelegramNotificationConsumer>(provider); });
             });
 
             services.AddScoped<IMassTransitCenter, MassTransitCenter>();
-        }
-
-        private static void RegisterConsumers(this IServiceCollectionConfigurator servicesConfigurator)
-        {
-            servicesConfigurator.AddConsumer<TelegramNotificationConsumer>();
         }
     }
 }

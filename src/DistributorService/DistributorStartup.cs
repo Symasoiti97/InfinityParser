@@ -5,7 +5,6 @@ using DistributorService.Services.Cache;
 using Domain;
 using Domain.Provider;
 using MassTransit;
-using MassTransit.ExtensionsDependencyInjectionIntegration;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,7 +25,7 @@ namespace DistributorService
             ConfigureOptions(services, configuration);
 
             ConfigureMassTransit(services);
-            
+
             services.AddEntityFrameworkNpgsql()
                 .AddDbContext<InfinityParserDbContext>(optionsBuilder =>
                     optionsBuilder.UseNpgsql(configuration["ConnectionString:Postgres"]));
@@ -34,7 +33,7 @@ namespace DistributorService
 
             services.AddSingleton<ICacheService, CacheService>();
             services.AddTransient<IAdapterService, AdapterService>();
-           
+
             services.AddHostedService<DistributorBackgroundService>();
         }
 
@@ -47,24 +46,12 @@ namespace DistributorService
         {
             services.AddMassTransit(cfg =>
             {
-                cfg.RegisterConsumers();
+                cfg.AddConsumer<DistributorConsumer>();
 
-                cfg.RegisterBus((provider, register) =>
-                {
-                    register.ReceiveEndpoint("distributor", regCfg =>
-                    {
-                        var reg = provider.GetService<IRegistration>();
-                        regCfg.ConfigureConsumer(reg, typeof(DistributorConsumer));
-                    });
-                });
+                cfg.RegisterBus((provider, register) => { register.ReceiveEndpoint<DistributorConsumer>(provider); });
             });
 
             services.AddScoped<IMassTransitCenter, MassTransitCenter>();
-        }
-
-        private static void RegisterConsumers(this IServiceCollectionConfigurator servicesConfigurator)
-        {
-            servicesConfigurator.AddConsumer<DistributorConsumer>();
         }
     }
 }

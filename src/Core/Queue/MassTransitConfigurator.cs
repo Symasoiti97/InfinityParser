@@ -2,30 +2,37 @@
 using MassTransit;
 using MassTransit.ExtensionsDependencyInjectionIntegration;
 using MassTransit.RabbitMqTransport;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
 namespace Queue
 {
     public static class MassTransitConfigurator
     {
-        public static void RegisterBus(this IServiceCollectionConfigurator servicesConfigurator, Action<IServiceProvider, IRabbitMqBusFactoryConfigurator> register)
+        public static void RegisterBus(this IServiceCollectionBusConfigurator servicesConfigurator, Action<IBusRegistrationContext, IRabbitMqBusFactoryConfigurator> register)
         {
-            servicesConfigurator.AddBus(context => CreateRabbitMqBusControl(context.Container, register));
+            servicesConfigurator.UsingRabbitMq((context, cfg) =>
+            {
+                var rabbitMqOptions = context.GetService<IOptions<RabbitMqOptions>>().Value;
+                var uri = new UriBuilder(rabbitMqOptions.Scheme, rabbitMqOptions.Host, rabbitMqOptions.Port).Uri;
+                cfg.Host(uri);
+                
+                register(context, cfg);
+            });
         }
 
-        private static IBusControl CreateRabbitMqBusControl(IServiceProvider provider, Action<IServiceProvider, IRabbitMqBusFactoryConfigurator> register)
+        public static void ReceiveEndpoint<TConsumer>(this IRabbitMqBusFactoryConfigurator configurator, IBusRegistrationContext context)
         {
-            var rabbitMqOptions = provider.GetService<IOptions<RabbitMqOptions>>().Value;
-            var busControl = Bus.Factory.CreateUsingRabbitMq(configurator =>
+            var queueName = BuildQueueName<TConsumer>();
+            configurator.ReceiveEndpoint(queueName, e =>
             {
-                var uri = new UriBuilder(rabbitMqOptions.Scheme, rabbitMqOptions.Host, rabbitMqOptions.Port).Uri;
-                configurator.Host(uri, hostConfigurator => { });
-
-                register(provider, configurator);
+                e.ConfigureConsumer(context, typeof(TConsumer));
             });
+        }
 
-            return busControl;
+        private static string BuildQueueName<TConsumer>()
+        {
+            var typeConsumer = typeof(TConsumer);
+            return typeConsumer.Name.ToLower().Replace("consumer", "");
         }
     }
 }

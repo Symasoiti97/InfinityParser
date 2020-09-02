@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Dto.ThreeNineMd;
 using MassTransit;
-using MassTransit.ExtensionsDependencyInjectionIntegration;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -27,7 +26,7 @@ namespace ParserHtml
             ConfigureMassTransit(services);
 
             services.AddTransient<IParserService<IEnumerable<ShortThreeNineMdItem>>, ThreeNineMdParser>();
-            
+
             services.AddHostedService<ParserHtmlBackgroundService>();
         }
 
@@ -40,24 +39,12 @@ namespace ParserHtml
         {
             services.AddMassTransit(cfg =>
             {
-                cfg.RegisterConsumers();
+                cfg.AddConsumer<ParserHtmlConsumer>();
 
-                cfg.RegisterBus((provider, register) =>
-                {
-                    register.ReceiveEndpoint("parser-html", regCfg =>
-                    {
-                        var reg = provider.GetService<IRegistration>();
-                        regCfg.ConfigureConsumer(reg, typeof(ParserHtmlConsumer));
-                    });
-                });
+                cfg.RegisterBus((provider, register) => { register.ReceiveEndpoint<ParserHtmlConsumer>(provider); });
             });
 
             services.AddScoped<IMassTransitCenter, MassTransitCenter>();
-        }
-
-        private static void RegisterConsumers(this IServiceCollectionConfigurator servicesConfigurator)
-        {
-            servicesConfigurator.AddConsumer<ParserHtmlConsumer>();
         }
     }
 }
