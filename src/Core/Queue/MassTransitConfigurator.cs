@@ -19,7 +19,7 @@ namespace Queue
             var rabbitMqOptions = provider.GetService<IOptions<RabbitMqOptions>>().Value;
             var busControl = Bus.Factory.CreateUsingRabbitMq(configurator =>
             {
-                var uri = new UriBuilder("rabbitmq", rabbitMqOptions.Host, rabbitMqOptions.Port).Uri;
+                var uri = new UriBuilder(rabbitMqOptions.Scheme, rabbitMqOptions.Host, rabbitMqOptions.Port).Uri;
                 configurator.Host(uri, hostConfigurator => { });
 
                 register(provider, configurator);
