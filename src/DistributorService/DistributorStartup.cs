@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using DistributorService.Consumers;
 using DistributorService.Services.Adapter;
 using DistributorService.Services.Cache;
@@ -26,12 +27,13 @@ namespace DistributorService
 
             ConfigureMassTransit(services);
 
-            services.AddDbContext<InfinityParserDbContext>(optionsBuilder =>
-                    optionsBuilder.UseNpgsql(configuration["ConnectionString:Postgres"]));
+            services.AddDbContext<InfinityParserDbContext>(optionsBuilder => optionsBuilder.UseNpgsql(configuration["ConnectionString:Postgres"]));
             services.AddScoped<IDataProvider, DataProvider>();
 
             services.AddSingleton<ICacheService, CacheService>();
             services.AddScoped<IAdapterService, AdapterService>();
+
+            services.AddTransient<Timer>();
 
             services.AddHostedService<DistributorBackgroundService>();
         }
