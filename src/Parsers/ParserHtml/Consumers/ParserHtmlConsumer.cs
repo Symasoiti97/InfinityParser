@@ -24,20 +24,18 @@ namespace ParserHtml.Consumers
             _publishEndpoint = publishEndpoint ?? throw new ArgumentNullException(nameof(publishEndpoint));
         }
 
-        public Task Consume(ConsumeContext<HtmlMessageDto> context)
+        public async Task Consume(ConsumeContext<HtmlMessageDto> context)
         {
             _logger.LogInformation("{0} - Get Message", typeof(ParserHtmlConsumer).Name);
 
             var parserService = GetParserHtmlService(context.Message.Site.ItemClass);
             var items = parserService.ParseHtmlContent(context.Message.HtmlContent).Result;
-            
-            _publishEndpoint.Publish(new DistributorMessageDto
+
+            await _publishEndpoint.Publish(new DistributorMessageDto
             {
                 Items = items,
                 Site = context.Message.Site
             });
-
-            return Task.CompletedTask;
         }
 
         private dynamic GetParserHtmlService(Type itemType)

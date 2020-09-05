@@ -46,7 +46,7 @@ namespace ManagerService
 
         private static void ConfigureMassTransit(IServiceCollection services)
         {
-            services.AddMassTransit(cfg => { cfg.RegisterBus((provider, register) => { }); });
+            services.AddMassTransit(cfg => { cfg.RegisterBus(); });
 
             services.AddScoped<IMassTransitCenter, MassTransitCenter>();
         }

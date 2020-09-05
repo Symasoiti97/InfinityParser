@@ -26,13 +26,12 @@ namespace DistributorService
 
             ConfigureMassTransit(services);
 
-            services.AddEntityFrameworkNpgsql()
-                .AddDbContext<InfinityParserDbContext>(optionsBuilder =>
+            services.AddDbContext<InfinityParserDbContext>(optionsBuilder =>
                     optionsBuilder.UseNpgsql(configuration["ConnectionString:Postgres"]));
             services.AddScoped<IDataProvider, DataProvider>();
 
             services.AddSingleton<ICacheService, CacheService>();
-            services.AddTransient<IAdapterService, AdapterService>();
+            services.AddScoped<IAdapterService, AdapterService>();
 
             services.AddHostedService<DistributorBackgroundService>();
         }

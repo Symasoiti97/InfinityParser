@@ -1,9 +1,9 @@
 ﻿namespace Dto.QueueMessages
 {
-    public class TelegramMessageDto
+    public class TelegramMessageDto : INotificationMessage
     {
         public SiteDto Site { get; set; }
         public string ChatId { get; set; }
-        public dynamic Items { get; set; }
+        public dynamic Item { get; set; }
     }
 }

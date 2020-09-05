@@ -6,6 +6,6 @@ namespace TelegramNotification.Services
 {
     public interface ITelegramService
     {
-        Task SendMessages<T>(ChatId chatId, IEnumerable<T> obj) where T : class;
+        Task SendMessages<T>(ChatId chatId, params T[] obj) where T : class;
     }
 }

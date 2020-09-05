@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Dto;
@@ -15,7 +15,7 @@ namespace TelegramNotification.Services
         private const int PublishItemCount = 20;
         private readonly ILogger<TelegramService> _logger;
         private readonly ITelegramBotClient _telegramBotClient;
-        private static readonly int TimePeriod = int.Parse(TimeSpan.FromSeconds(65).TotalMilliseconds.ToString());
+        private static readonly int TimePeriod = int.Parse(TimeSpan.FromSeconds(65).TotalMilliseconds.ToString(CultureInfo.CurrentCulture));
 
         public TelegramService(
             ILogger<TelegramService> logger,
@@ -25,7 +25,7 @@ namespace TelegramNotification.Services
             _telegramBotClient = telegramBotClient ?? throw new ArgumentNullException(nameof(telegramBotClient));
         }
 
-        public async Task SendMessages<T>(ChatId chatId, IEnumerable<T> items) where T : class
+        public async Task SendMessages<T>(ChatId chatId, params T[] items) where T : class
         {
             if (chatId == null) throw new ArgumentNullException(nameof(chatId));
             if (items == null) throw new ArgumentNullException(nameof(items));

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net.Http;
+using GreenPipes;
 using MassTransit;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -49,7 +50,7 @@ namespace TelegramNotification
             {
                 cfg.AddConsumer<TelegramNotificationConsumer>();
 
-                cfg.RegisterBus((provider, register) => { register.ReceiveEndpoint<TelegramNotificationConsumer>(provider); });
+                cfg.RegisterBus((provider, register) => { register.ReceiveEndpoint<TelegramNotificationConsumer>(provider, configurator => configurator.UseRateLimit(1, TimeSpan.FromSeconds(20))); });
             });
 
             services.AddScoped<IMassTransitCenter, MassTransitCenter>();

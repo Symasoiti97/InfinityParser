@@ -8,4 +8,11 @@
       <ProjectReference Include="..\Db\Db.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Compile Remove="QueueMessages\ScheduleNotificationCommand.cs" />
+      <Compile Update="QueueMessages\TelegramMessageDto.cs">
+        <DependentUpon>INotificationMessage.cs</DependentUpon>
+      </Compile>
+    </ItemGroup>
+
 </Project>

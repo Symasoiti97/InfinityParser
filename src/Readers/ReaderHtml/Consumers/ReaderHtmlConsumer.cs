@@ -23,7 +23,7 @@ namespace ReaderHtml.Consumers
             _publishEndpoint = publishEndpoint ?? throw new ArgumentNullException(nameof(publishEndpoint));
         }
 
-        public Task Consume(ConsumeContext<SiteMessageDto> context)
+        public async Task Consume(ConsumeContext<SiteMessageDto> context)
         {
             var message = context.Message;
 
@@ -31,13 +31,11 @@ namespace ReaderHtml.Consumers
 
             var htmlContent = _readerHtmlService.GetAsync(message.Site.Url).Result;
 
-            _publishEndpoint.Publish(new HtmlMessageDto
+            await _publishEndpoint.Publish(new HtmlMessageDto
             {
                 Site = message.Site,
                 HtmlContent = htmlContent
             });
-
-            return Task.CompletedTask;
         }
     }
 }

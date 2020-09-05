@@ -41,7 +41,11 @@ namespace DistributorService.Services.Adapter
 
             if (uncachedItems.Any())
             {
+                using var tr = _dataProvider.Transaction();
+
                 await SaveAndPublishNotification(site, uncachedItems);
+
+                tr.Complete();
             }
         }
 
@@ -62,10 +66,12 @@ namespace DistributorService.Services.Adapter
                 }
                 catch (Exception e)
                 {
-                    if (!(e is ObjectAlreadyExistsException))
+                    if (e is ObjectAlreadyExistsException)
                     {
-                        _logger.LogError(e, "Error inserting row in data base.");
+                        continue;
                     }
+
+                    _logger.LogError(e, "Error inserting row in data base.");
                 }
             }
         }
@@ -90,7 +96,7 @@ namespace DistributorService.Services.Adapter
             var message = new TelegramMessageDto
             {
                 ChatId = chatId,
-                Items = item,
+                Item = item,
                 Site = site
             };
 

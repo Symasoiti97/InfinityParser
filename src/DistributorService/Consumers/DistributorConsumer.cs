@@ -21,16 +21,14 @@ namespace DistributorService.Consumers
             _adapterService = adapterService ?? throw new ArgumentNullException(nameof(adapterService));
         }
 
-        public Task Consume(ConsumeContext<DistributorMessageDto> context)
+        public async Task Consume(ConsumeContext<DistributorMessageDto> context)
         {
             _logger.LogInformation("{0} - Get Message", typeof(DistributorConsumer).Name);
 
             var message = context.Message;
             var items = message.Items.ToObject(message.Site.ItemClass.ToEnumerableType());
 
-            _adapterService.SaveAndPublishNotify(message.Site, items).GetAwaiter();
-
-            return Task.CompletedTask;
+            await _adapterService.SaveAndPublishNotify(message.Site, items);
         }
     }
 }
