@@ -50,7 +50,7 @@ namespace TelegramNotification
             {
                 cfg.AddConsumer<TelegramNotificationConsumer>();
 
-                cfg.RegisterBus((provider, register) => { register.ReceiveEndpoint<TelegramNotificationConsumer>(provider, configurator => configurator.UseRateLimit(1, TimeSpan.FromSeconds(20))); });
+                cfg.RegisterBus((provider, register) => { register.ReceiveEndpoint<TelegramNotificationConsumer>(provider, configurator => configurator.UseRateLimit(20, TimeSpan.FromMinutes(1))); });
             });
 
             services.AddScoped<IMassTransitCenter, MassTransitCenter>();
