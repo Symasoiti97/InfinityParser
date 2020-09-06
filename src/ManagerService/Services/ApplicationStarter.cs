@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
@@ -28,13 +29,16 @@ namespace ManagerService.Services
 
         public async Task Start()
         {
-            var sites = await _dataProvider.Get<SiteDb>().ProjectTo<SiteDto>(_mapper.ConfigurationProvider).ToArrayAsync();
+            var dataSites = await _dataProvider.Get<ParserSiteDb>().ProjectTo<DataSiteDto>(_mapper.ConfigurationProvider).ToArrayAsync();
+
+            if (!dataSites.Any())
+                throw new ArgumentException(nameof(dataSites));
 
             var scope = _serviceProvider.CreateScope();
-            foreach (var site in sites)
+            foreach (var dataSite in dataSites)
             {
                 var parser = scope.ServiceProvider.GetService<IParserService>();
-                parser.StartParsing(site);
+                parser.StartParsing(dataSite);
             }
         }
     }

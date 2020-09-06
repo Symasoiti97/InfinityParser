@@ -28,13 +28,13 @@ namespace ParserHtml.Consumers
         {
             _logger.LogInformation("{0} - Get Message", typeof(ParserHtmlConsumer).Name);
 
-            var parserService = GetParserHtmlService(context.Message.Site.ItemClass);
+            var parserService = GetParserHtmlService(context.Message.ParserSite.ItemType);
             var items = parserService.ParseHtmlContent(context.Message.HtmlContent).Result;
 
             await _publishEndpoint.Publish(new DistributorMessageDto
             {
                 Items = items,
-                Site = context.Message.Site
+                ParserSite = context.Message.ParserSite
             });
         }
 

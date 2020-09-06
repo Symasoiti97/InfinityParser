@@ -8,9 +8,9 @@ namespace Db.Models
         public Guid Id { get; set; }
         public string Url { get; set; }
 
-        public DateTime CreateDate { get; set; }
-        
-        public Guid SiteId { get; set; }
-        public virtual SiteDb Site { get; set; }
+        public DateTime CreatedDate { get; set; }
+
+        public Guid ParserSiteId { get; set; }
+        public virtual ParserSiteDb ParserSite { get; set; }
     }
 }

@@ -27,13 +27,13 @@ namespace ReaderHtml.Consumers
         {
             var message = context.Message;
 
-            _logger.LogInformation("{0} : Url: {1} | ItemType: {2}", typeof(ReaderHtmlConsumer).Name, message.Site.Url, message.Site.ItemClass);
+            _logger.LogInformation("{0} : Url: {1} | ItemType: {2}", typeof(ReaderHtmlConsumer).Name, message.ParserSite.Url, message.ParserSite.ItemType);
 
-            var htmlContent = _readerHtmlService.GetAsync(message.Site.Url).Result;
+            var htmlContent = _readerHtmlService.GetAsync(message.ParserSite.Url).Result;
 
             await _publishEndpoint.Publish(new HtmlMessageDto
             {
-                Site = message.Site,
+                ParserSite = message.ParserSite,
                 HtmlContent = htmlContent
             });
         }

@@ -13,7 +13,7 @@ namespace ManagerService.Services
         private readonly Timer _timer;
         private readonly IMassTransitCenter _massTransitCenter;
         private readonly ILogger<ParserService> _logger;
-        private SiteDto _site;
+        private DataSiteDto _dataSite;
 
         public ParserService(
             Timer timer,
@@ -27,9 +27,9 @@ namespace ManagerService.Services
             _random = new Random();
         }
 
-        public void StartParsing(SiteDto site)
+        public void StartParsing(DataSiteDto dataSite)
         {
-            _site = site ?? throw new ArgumentNullException(nameof(_site));
+            _dataSite = dataSite ?? throw new ArgumentNullException(nameof(_dataSite));
 
             SetTimerIntervalBySite();
 
@@ -40,7 +40,7 @@ namespace ManagerService.Services
 
         public void RestartParsing()
         {
-            if (_site == null) throw new ArgumentNullException(nameof(_site));
+            if (_dataSite == null) throw new ArgumentNullException(nameof(_dataSite));
 
             SetTimerIntervalBySite();
 
@@ -65,15 +65,20 @@ namespace ManagerService.Services
         {
             _massTransitCenter.Publish(new SiteMessageDto
             {
-                Site = _site
+                ParserSite = new ParserSiteDto
+                {
+                    Id = _dataSite.Id,
+                    Url = _dataSite.Url,
+                    ItemType = _dataSite.ItemParentType
+                }
             });
 
-            _logger.LogInformation("ParserService: send message. Site: {0}", _site);
+            _logger.LogInformation("ParserService: send message. Site: {0}", _dataSite);
         }
 
         private void SetTimerIntervalBySite()
         {
-            var interval = _random.Next(_site.IntervalFrom, _site.IntervalTo);
+            var interval = _random.Next(_dataSite.IntervalFrom, _dataSite.IntervalTo);
             _timer.Interval = TimeSpan.FromSeconds(interval).TotalMilliseconds;
         }
     }

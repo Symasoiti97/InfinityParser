@@ -6,6 +6,8 @@ namespace DistributorService.Services.Cache
 {
     public interface ICacheService
     {
-        IEnumerable<T> SaveAndGetUncached<T>(Guid siteId, IEnumerable<T> items) where T : ItemDto;
+        IEnumerable<T> SaveAndGetUncachedItem<T>(Guid siteId, IEnumerable<T> items) where T : ItemDto;
+        public DataSiteDto GetCachedSiteOrNull(Guid siteId);
+        public void SetCachedSite(DataSiteDto dataSite);
     }
 }

@@ -1,10 +1,12 @@
 ﻿using System;
-using System.Threading;
+using System.Timers;
+using AutoMapper;
 using DistributorService.Consumers;
 using DistributorService.Services.Adapter;
 using DistributorService.Services.Cache;
 using Domain;
 using Domain.Provider;
+using Helper.Mappers;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -26,6 +28,8 @@ namespace DistributorService
             ConfigureOptions(services, configuration);
 
             ConfigureMassTransit(services);
+
+            services.AddAutoMapper((provider, config) => { config.AddProfile(new MapperProfile()); }, new Type[] { }, ServiceLifetime.Transient);
 
             services.AddDbContext<InfinityParserDbContext>(optionsBuilder => optionsBuilder.UseNpgsql(configuration["ConnectionString:Postgres"]));
             services.AddScoped<IDataProvider, DataProvider>();

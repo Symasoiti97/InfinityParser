@@ -26,9 +26,9 @@ namespace DistributorService.Consumers
             _logger.LogInformation("{0} - Get Message", typeof(DistributorConsumer).Name);
 
             var message = context.Message;
-            var items = message.Items.ToObject(message.Site.ItemClass.ToEnumerableType());
+            var items = message.Items.ToObject(message.ParserSite.ItemType.ToEnumerableType());
 
-            await _adapterService.SaveAndPublishNotify(message.Site, items);
+            await _adapterService.SaveAndPublishNotify(message.ParserSite, items);
         }
     }
 }

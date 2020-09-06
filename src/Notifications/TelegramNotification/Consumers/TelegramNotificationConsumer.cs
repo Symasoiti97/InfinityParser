@@ -26,7 +26,7 @@ namespace TelegramNotification.Consumers
             _logger.LogInformation("{0} - Get Message", typeof(TelegramNotificationConsumer).Name);
 
             var message = context.Message;
-            var item = message.Item.ToObject(message.Site.ItemClass);
+            var item = message.Item.ToObject(message.ParserSite.ItemType);
 
             await _telegramService.SendMessages(new ChatId(message.ChatId), item);
         }

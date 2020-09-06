@@ -6,6 +6,6 @@ namespace DistributorService.Services.Adapter
 {
     public interface IAdapterService
     {
-        Task SaveAndPublishNotify<T>(SiteDto site, IEnumerable<T> items) where T : ItemDto;
+        Task SaveAndPublishNotify<T>(ParserSiteDto parserSite, IEnumerable<T> items) where T : ItemDto;
     }
 }

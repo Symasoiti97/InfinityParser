@@ -2,7 +2,7 @@
 {
     public class DistributorMessageDto
     {
-        public SiteDto Site { get; set; }
+        public ParserSiteDto ParserSite { get; set; }
         public dynamic Items { get; set; }
     }
 }

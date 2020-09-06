@@ -35,7 +35,7 @@ namespace Domain.Provider
             {
                 if (model is ICreatable m)
                 {
-                    m.CreateDate = DateTime.UtcNow;
+                    m.CreatedDate = DateTime.UtcNow;
                 }
 
                 await _db.Set<T>().AddAsync(model);
@@ -55,7 +55,7 @@ namespace Domain.Provider
                     {
                         if (entity is ICreatable m)
                         {
-                            m.CreateDate = DateTime.UtcNow;
+                            m.CreatedDate = DateTime.UtcNow;
                         }
                     }
 

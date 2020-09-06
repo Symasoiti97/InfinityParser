@@ -14,6 +14,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\Core\Dto\Dto.csproj" />
+      <ProjectReference Include="..\..\Core\Helper\Helper.csproj" />
       <ProjectReference Include="..\..\Core\Logger\Logger.csproj" />
       <ProjectReference Include="..\..\Core\Queue\Queue.csproj" />
     </ItemGroup>

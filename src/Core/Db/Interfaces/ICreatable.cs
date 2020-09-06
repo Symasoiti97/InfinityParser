@@ -4,6 +4,6 @@ namespace Db.Interfaces
 {
     public interface ICreatable
     {
-        DateTime CreateDate { get; set; }
+        DateTime CreatedDate { get; set; }
     }
 }

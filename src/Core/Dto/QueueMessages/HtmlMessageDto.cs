@@ -2,7 +2,7 @@
 {
     public class HtmlMessageDto
     {
-        public SiteDto Site { get; set; }
+        public ParserSiteDto ParserSite { get; set; }
         public string HtmlContent { get; set; }
     }
 }
