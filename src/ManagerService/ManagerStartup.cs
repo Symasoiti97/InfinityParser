@@ -29,9 +29,7 @@ namespace ManagerService
 
             services.AddAutoMapper((provider, config) => { config.AddProfile(new MapperProfile()); }, new Type[] { }, ServiceLifetime.Transient);
 
-            services.AddEntityFrameworkNpgsql()
-                .AddDbContext<InfinityParserDbContext>(optionsBuilder =>
-                    optionsBuilder.UseNpgsql(configuration["ConnectionString:Postgres"]));
+            services.AddDbContext<InfinityParserDbContext>(optionsBuilder => optionsBuilder.UseNpgsql(configuration.GetConnectionString("Postgres")));
             services.AddScoped<IDataProvider, DataProvider>();
 
             services.AddTransient<Timer>();

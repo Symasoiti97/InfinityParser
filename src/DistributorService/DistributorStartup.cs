@@ -31,7 +31,7 @@ namespace DistributorService
 
             services.AddAutoMapper((provider, config) => { config.AddProfile(new MapperProfile()); }, new Type[] { }, ServiceLifetime.Transient);
 
-            services.AddDbContext<InfinityParserDbContext>(optionsBuilder => optionsBuilder.UseNpgsql(configuration["ConnectionString:Postgres"]));
+            services.AddDbContext<InfinityParserDbContext>(optionsBuilder => optionsBuilder.UseNpgsql(configuration.GetConnectionString("Postgres")));
             services.AddScoped<IDataProvider, DataProvider>();
 
             services.AddSingleton<ICacheService, CacheService>();
