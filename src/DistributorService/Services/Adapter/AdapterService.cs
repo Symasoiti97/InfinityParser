@@ -6,6 +6,7 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Db.Models;
 using DistributorService.Services.Cache;
+using DistributorService.Services.Filter;
 using Domain.Provider;
 using Dto;
 using Dto.Common;
@@ -23,38 +24,45 @@ namespace DistributorService.Services.Adapter
         private readonly IPublishEndpoint _publishEndpoint;
         private readonly ICacheService _cacheService;
         private readonly IMapper _mapper;
+        private readonly IFilterService _filterService;
 
         public AdapterService(
             ILogger<AdapterService> logger,
             IDataProvider dataProvider,
             IPublishEndpoint publishEndpoint,
             ICacheService cacheService,
-            IMapper mapper)
+            IMapper mapper,
+            IFilterService filterService)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _dataProvider = dataProvider ?? throw new ArgumentNullException(nameof(dataProvider));
             _publishEndpoint = publishEndpoint ?? throw new ArgumentNullException(nameof(publishEndpoint));
             _cacheService = cacheService ?? throw new ArgumentNullException(nameof(cacheService));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+            _filterService = filterService ?? throw new ArgumentNullException(nameof(filterService));
         }
 
         public async Task SaveAndPublishNotify<T>(ParserSiteDto parserSite, IEnumerable<T> items) where T : ItemDto
         {
             if (parserSite == null) throw new ArgumentNullException(nameof(parserSite));
 
-            var uncachedItems = _cacheService.SaveAndGetUncachedItem(parserSite.Id, items).ToArray();
+            var itemArray = items as T[] ?? items.ToArray();
+            var uncachedItems = _cacheService.SaveAndGetUncachedItem(parserSite.Id, itemArray).ToArray();
 
-            if (uncachedItems.Any())
+            var dataSite = GetDataSiteFromCacheOrDataBase(parserSite.Id);
+            var uncachedItemWithFilter = _filterService.Filter(itemArray, dataSite.IncludeFilter, dataSite.ExcludeFilter);
+
+            if (uncachedItemWithFilter.Any())
             {
                 using var tr = _dataProvider.Transaction();
 
-                await SaveAndPublishNotificationOrParseChild(parserSite, uncachedItems);
+                await SaveAndPublishNotificationOrParseChild(dataSite, parserSite, uncachedItems);
 
                 tr.Complete();
             }
         }
 
-        private async Task SaveAndPublishNotificationOrParseChild<T>(ParserSiteDto parserSite, IEnumerable<T> items) where T : ItemDto
+        private async Task SaveAndPublishNotificationOrParseChild<T>(DataSiteDto dataSite, ParserSiteDto parserSite, IEnumerable<T> items) where T : ItemDto
         {
             foreach (var itemDto in items)
             {
@@ -65,8 +73,6 @@ namespace DistributorService.Services.Adapter
                         ParserSiteId = parserSite.Id,
                         Url = itemDto.Url
                     };
-
-                    var dataSite = GetDataSiteFromCacheOrDataBase(parserSite.Id);
 
                     if (dataSite.IsParseChild && dataSite.ItemParentType == parserSite.ItemType)
                     {

@@ -15,10 +15,10 @@ namespace Dto
         public Type ItemChildType { get; set; }
         public int IntervalFrom { get; set; }
         public int IntervalTo { get; set; }
-        public IDictionary<NotificationType, string> Notifications { get; set; }
+        public Dictionary<NotificationType, string> Notifications { get; set; }
         public bool IsParseChild { get; set; }
-        public IDictionary<string, string[]> IncludeFilter { get; set; }
-        public IDictionary<string, string[]> ExcludeFilter { get; set; }
+        public Dictionary<string, string[]> IncludeFilter { get; set; }
+        public Dictionary<string, string[]> ExcludeFilter { get; set; }
         public ClientDto Client { get; set; }
     }
 }

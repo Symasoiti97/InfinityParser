@@ -27,5 +27,8 @@
       <Compile Update="Services\Cache\CacheService.cs">
         <DependentUpon>ICacheService.cs</DependentUpon>
       </Compile>
+      <Compile Update="Services\Filter\FilterService.cs">
+        <DependentUpon>IFilterService.cs</DependentUpon>
+      </Compile>
     </ItemGroup>
 </Project>

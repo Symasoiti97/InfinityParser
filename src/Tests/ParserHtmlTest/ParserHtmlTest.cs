@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Db.Models;
 using Db.Models.Common;
+using DistributorService.Services.Filter;
 using Domain;
 using Domain.Provider;
 using Dto.Common;
@@ -122,6 +123,60 @@ namespace ParserHtmlTest
             var typeFlItemByName = Type.GetType(nameFlItem);
 
             Assert.Pass();
+        }
+
+        [Test]
+        public void Test_Filter_CollectionsEquals()
+        {
+            var filterService = new FilterService();
+
+            var items = new[]
+            {
+                new FlItem
+                {
+                    Content = "Content",
+                    Url = "https://fl.ru/items/new?type=work"
+                }
+            };
+            var includeFilter = new Dictionary<string, string[]>
+            {
+                {"Content", new[] {"Content", "ent", "cont"}}
+            };
+            var excludeFilter = new Dictionary<string, string[]>
+            {
+                {"Content", new[] {"Contents"}}
+            };
+
+            var itemsByFilter = filterService.Filter(items, includeFilter, excludeFilter);
+
+            CollectionAssert.AreEqual(itemsByFilter, items);
+        }
+        
+        [Test]
+        public void Test_Filter_CollectionsNotEquals()
+        {
+            var filterService = new FilterService();
+
+            var items = new[]
+            {
+                new FlItem
+                {
+                    Content = "Content",
+                    Url = "https://fl.ru/items/new?type=work"
+                }
+            };
+            var includeFilter = new Dictionary<string, string[]>
+            {
+                {"Content", new[] {"Contents", "ent", "cont"}}
+            };
+            var excludeFilter = new Dictionary<string, string[]>
+            {
+                {"Content", new[] {"Contents"}}
+            };
+
+            var itemsByFilter = filterService.Filter(items, includeFilter, excludeFilter);
+
+            CollectionAssert.AreNotEqual(itemsByFilter, items);
         }
     }
 }

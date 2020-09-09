@@ -4,6 +4,7 @@ using AutoMapper;
 using DistributorService.Consumers;
 using DistributorService.Services.Adapter;
 using DistributorService.Services.Cache;
+using DistributorService.Services.Filter;
 using Domain;
 using Domain.Provider;
 using Helper.Mappers;
@@ -37,6 +38,7 @@ namespace DistributorService
             services.AddSingleton<ICacheService, CacheService>();
             services.AddScoped<IAdapterService, AdapterService>();
 
+            services.AddTransient<IFilterService, FilterService>();
             services.AddTransient<Timer>();
 
             services.AddHostedService<DistributorBackgroundService>();
