@@ -24,7 +24,7 @@ namespace ReaderHtml.Services
             var httpResponseMessage = await _httpClient.GetAsync(address);
             var source = string.Empty;
 
-            if (httpResponseMessage != null && httpResponseMessage.StatusCode == HttpStatusCode.OK)
+            if (httpResponseMessage is {StatusCode: HttpStatusCode.OK})
             {
                 source = await httpResponseMessage.Content.ReadAsStringAsync();
             }

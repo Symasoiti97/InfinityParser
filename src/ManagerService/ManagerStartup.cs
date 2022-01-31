@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Timers;
-using Domain;
-using Domain.Provider;
 using ManagerService.Services;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +8,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Queue;
 using AutoMapper;
+using Db;
+using Db.Provider;
 using Helper.Mappers;
 
 namespace ManagerService

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Db.Models.Common;
 using Dto.Common;
 
 namespace Dto
@@ -10,7 +9,6 @@ namespace Dto
         public Guid Id { get; set; }
         public Guid SiteId { get; set; }
         public string Url { get; set; }
-        public ItemType ItemType { get; set; }
         public Type ItemParentType { get; set; }
         public Type ItemChildType { get; set; }
         public int IntervalFrom { get; set; }

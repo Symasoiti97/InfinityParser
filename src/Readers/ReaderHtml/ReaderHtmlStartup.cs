@@ -1,9 +1,13 @@
 ﻿using System;
+using System.IO;
 using System.Net.Http;
+using System.Reflection;
 using MassTransit;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
 using Queue;
 using ReaderHtml.Consumers;
 using ReaderHtml.Services;
@@ -23,8 +27,14 @@ namespace ReaderHtml
 
             ConfigureMassTransit(services);
 
+            //обновить .net и использовать AddHttpService
             services.AddTransient<HttpClient>();
-            services.AddTransient<IReaderHtmlService, ReaderWebClientService>();
+            services.AddTransient<IReaderHtmlService, ReaderWebDriverService>();
+            services.AddTransient<IWebDriver>(provider =>
+            {
+                var outPutDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+                return new ChromeDriver(outPutDirectory);
+            });
 
             services.AddHostedService<ReaderHtmlBackgroundService>();
         }

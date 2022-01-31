@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Db;
 using Db.Models;
-using Db.Models.Common;
+using Db.Provider;
 using DistributorService.Services.Filter;
-using Domain;
-using Domain.Provider;
 using Dto.Common;
 using Dto.Fl;
 using Dto.ThreeNineMd;
@@ -77,7 +76,6 @@ namespace ParserHtmlTest
                     Id = Guid.NewGuid(),
                     BaseUrl = "https://999.md",
                     Url = "https://999.md/ru/list/transport/cars?selected_currency=original",
-                    ItemType = ItemType.Automobile,
                     ItemChildType = null,
                     ItemParentType = typeof(ShortThreeNineMdItem).AssemblyQualifiedName
                 }

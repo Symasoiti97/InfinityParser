@@ -4,14 +4,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Db.Exceptions;
 using Db.Models;
+using Db.Provider;
 using DistributorService.Services.Cache;
 using DistributorService.Services.Filter;
-using Domain.Provider;
 using Dto;
 using Dto.Common;
 using Dto.QueueMessages;
-using Helper.Exceptions;
 using MassTransit;
 using Microsoft.Extensions.Logging;
 

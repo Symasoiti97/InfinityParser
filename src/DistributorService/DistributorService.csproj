@@ -14,21 +14,21 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Core\Domain\Domain.csproj" />
-      <ProjectReference Include="..\Core\Dto\Dto.csproj" />
-      <ProjectReference Include="..\Core\Logger\Logger.csproj" />
-      <ProjectReference Include="..\Core\Queue\Queue.csproj" />
+        <ProjectReference Include="..\Core\Dto\Dto.csproj" />
+        <ProjectReference Include="..\Core\Helper\Helper.csproj" />
+        <ProjectReference Include="..\Core\Logger\Logger.csproj" />
+        <ProjectReference Include="..\Core\Queue\Queue.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <Compile Update="Services\Adapter\AdapterService.cs">
-        <DependentUpon>IAdapterService.cs</DependentUpon>
-      </Compile>
-      <Compile Update="Services\Cache\CacheService.cs">
-        <DependentUpon>ICacheService.cs</DependentUpon>
-      </Compile>
-      <Compile Update="Services\Filter\FilterService.cs">
-        <DependentUpon>IFilterService.cs</DependentUpon>
-      </Compile>
+        <Compile Update="Services\Adapter\AdapterService.cs">
+            <DependentUpon>IAdapterService.cs</DependentUpon>
+        </Compile>
+        <Compile Update="Services\Cache\CacheService.cs">
+            <DependentUpon>ICacheService.cs</DependentUpon>
+        </Compile>
+        <Compile Update="Services\Filter\FilterService.cs">
+            <DependentUpon>IFilterService.cs</DependentUpon>
+        </Compile>
     </ItemGroup>
 </Project>

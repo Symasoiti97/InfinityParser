@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Db.Interfaces;
-using Db.Models.Common;
 
 namespace Db.Models
 {
@@ -12,7 +11,6 @@ namespace Db.Models
 
         public string BaseUrl { get; set; }
         public string Url { get; set; }
-        public ItemType ItemType { get; set; }
 
         /// <summary>
         /// This type for GetType()

@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Timers;
 using AutoMapper;
+using Db;
+using Db.Provider;
 using DistributorService.Consumers;
 using DistributorService.Services.Adapter;
 using DistributorService.Services.Cache;
 using DistributorService.Services.Filter;
-using Domain;
-using Domain.Provider;
 using Helper.Mappers;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;

@@ -26,10 +26,10 @@ namespace ParserHtml.Consumers
 
         public async Task Consume(ConsumeContext<HtmlMessageDto> context)
         {
-            _logger.LogInformation("{0} - Get Message", typeof(ParserHtmlConsumer).Name);
+            _logger.LogInformation("{0} - Get Message", nameof(ParserHtmlConsumer));
 
             var parserService = GetParserHtmlService(context.Message.ParserSite.ItemType);
-            var items = parserService.ParseHtmlContent(context.Message.HtmlContent).Result;
+            var items = await parserService.ParseHtmlContent(context.Message.HtmlContent);
 
             await _publishEndpoint.Publish(new DistributorMessageDto
             {

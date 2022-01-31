@@ -23,7 +23,7 @@ namespace TelegramNotification.Consumers
 
         public async Task Consume(ConsumeContext<TelegramMessageDto> context)
         {
-            _logger.LogInformation("{0} - Get Message", typeof(TelegramNotificationConsumer).Name);
+            _logger.LogInformation("{0} - Get Message", nameof(TelegramNotificationConsumer));
 
             var message = context.Message;
             var item = message.Item.ToObject(message.ParserSite.ItemType);

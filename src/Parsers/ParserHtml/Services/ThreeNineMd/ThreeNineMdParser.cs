@@ -24,26 +24,23 @@ namespace ParserHtml.Services.ThreeNineMd
             return await ParseItem(htmlContent);
         }
 
-        private async Task<IEnumerable<ShortThreeNineMdItem>> ParseItem(string sourceContent)
+        private Task<IEnumerable<ShortThreeNineMdItem>> ParseItem(string sourceContent)
         {
-            return await Task.Run(() =>
+            var htmlDocument = GetHtmlDocument(sourceContent);
+            try
             {
-                var htmlDocument = GetHtmlDocument(sourceContent);
-                try
-                {
-                    var listElement = ParseList(htmlDocument);
+                var listElement = ParseList(htmlDocument);
 
-                    var newsItems = listElement.Select(GetItem)
-                        .Where(newsListItem => newsListItem != null).ToArray();
+                var newsItems = listElement.Select(GetItem)
+                    .Where(newsListItem => newsListItem != null).ToArray();
 
-                    return newsItems;
-                }
-                catch (Exception e)
-                {
-                    _logger.LogWarning(e, "{0} - Error parsing list for resource {1}", typeof(ThreeNineMdParser).Name, BaseUrl.ToString());
-                    return Enumerable.Empty<ShortThreeNineMdItem>();
-                }
-            });
+                return Task.FromResult(newsItems.AsEnumerable());
+            }
+            catch (Exception e)
+            {
+                _logger.LogWarning(e, "{0} - Error parsing list for resource {1}", nameof(ThreeNineMdParser), BaseUrl.ToString());
+                return Task.FromResult(Enumerable.Empty<ShortThreeNineMdItem>());
+            }
         }
 
         private HtmlDocument GetHtmlDocument(string sourceContent)
@@ -95,7 +92,7 @@ namespace ParserHtml.Services.ThreeNineMd
             catch (NullReferenceException e)
             {
                 _logger.LogError(e, "Could not parse URL for resource {0}. No href node was found. HtmlNode: {1}", BaseUrl, htmlNode);
-                
+
                 return string.Empty;
             }
         }
@@ -108,7 +105,7 @@ namespace ParserHtml.Services.ThreeNineMd
         private string ParsePrice(HtmlNode htmlNode)
         {
             var price = htmlNode.SelectSingleNode(".//*[@class='ads-list-photo-item-price-wrapper']")?
-                            .InnerText.Trim() ?? string.Empty;
+                .InnerText.Trim() ?? string.Empty;
 
             return Regex.Replace(price, @"&nbsp;", " ");
         }

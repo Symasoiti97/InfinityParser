@@ -17,7 +17,6 @@ namespace Helper.Mappers
                 .ForMember(d => d.ExcludeFilter, o => o.MapFrom(s => MapFromJson<Dictionary<string, string[]>>(s.ExcludeFilter)))
                 .ForMember(d => d.IncludeFilter, o => o.MapFrom(s => MapFromJson<Dictionary<string, string[]>>(s.IncludeFilter)))
                 .ForMember(d => d.Notifications, o => o.MapFrom(s => MapFromJson<Dictionary<NotificationType, string>>(s.Notifications)))
-                .ForMember(d => d.ItemType, o => o.MapFrom(s => s.Site.ItemType))
                 .ForMember(d => d.ItemChildType, o => o.MapFrom(s => s.Site.ItemChildType != null ? Type.GetType(s.Site.ItemChildType) : null))
                 .ForMember(d => d.ItemParentType, o => o.MapFrom(s => Type.GetType(s.Site.ItemParentType)));
 

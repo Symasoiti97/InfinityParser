@@ -29,7 +29,7 @@ namespace ManagerService.Services
 
         public void StartParsing(DataSiteDto dataSite)
         {
-            _dataSite = dataSite ?? throw new ArgumentNullException(nameof(_dataSite));
+            _dataSite = dataSite ?? throw new ArgumentNullException(nameof(dataSite));
 
             SetTimerIntervalBySite();
 

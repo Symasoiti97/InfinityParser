@@ -27,9 +27,9 @@ namespace ReaderHtml.Consumers
         {
             var message = context.Message;
 
-            _logger.LogInformation("{0} : Url: {1} | ItemType: {2}", typeof(ReaderHtmlConsumer).Name, message.ParserSite.Url, message.ParserSite.ItemType);
+            _logger.LogInformation("{0} : Url: {1} | ItemType: {2}", nameof(ReaderHtmlConsumer), message.ParserSite.Url, message.ParserSite.ItemType);
 
-            var htmlContent = _readerHtmlService.GetAsync(message.ParserSite.Url).Result;
+            var htmlContent = await _readerHtmlService.GetAsync(message.ParserSite.Url);
 
             await _publishEndpoint.Publish(new HtmlMessageDto
             {

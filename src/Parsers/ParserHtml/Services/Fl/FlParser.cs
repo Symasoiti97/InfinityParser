@@ -18,31 +18,28 @@ namespace ParserHtml.Services.Fl
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task<IEnumerable<FlItem>> ParseHtmlContent(string htmlContent)
+        public Task<IEnumerable<FlItem>> ParseHtmlContent(string htmlContent)
         {
-            return await ParseItem(htmlContent);
+            return Task.FromResult(ParseItem(htmlContent));
         }
 
-        private async Task<IEnumerable<FlItem>> ParseItem(string sourceContent)
+        private IEnumerable<FlItem> ParseItem(string sourceContent)
         {
-            return await Task.Run(() =>
+            var htmlDocument = GetHtmlDocument(sourceContent);
+            try
             {
-                var htmlDocument = GetHtmlDocument(sourceContent);
-                try
-                {
-                    var listElement = ParseList(htmlDocument);
+                var listElement = ParseList(htmlDocument);
 
-                    var newsItems = listElement.Select(GetItem)
-                        .Where(newsListItem => newsListItem != null).ToArray();
+                var newsItems = listElement.Select(GetItem)
+                    .Where(newsListItem => newsListItem != null).ToArray();
 
-                    return newsItems;
-                }
-                catch (Exception e)
-                {
-                    _logger.LogWarning(e, "{0} - Error parsing list for resource {1}", typeof(FlParser).Name, BaseUrl.ToString());
-                    return Enumerable.Empty<FlItem>();
-                }
-            });
+                return newsItems;
+            }
+            catch (Exception e)
+            {
+                _logger.LogWarning(e, "{0} - Error parsing list for resource {1}", nameof(FlParser), BaseUrl.ToString());
+                return Enumerable.Empty<FlItem>();
+            }
         }
 
         private HtmlDocument GetHtmlDocument(string sourceContent)

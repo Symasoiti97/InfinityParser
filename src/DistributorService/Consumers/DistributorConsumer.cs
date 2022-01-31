@@ -23,7 +23,7 @@ namespace DistributorService.Consumers
 
         public async Task Consume(ConsumeContext<DistributorMessageDto> context)
         {
-            _logger.LogInformation("{0} - Get Message", typeof(DistributorConsumer).Name);
+            _logger.LogInformation("{0} - Get Message", nameof(DistributorConsumer));
 
             var message = context.Message;
             var items = message.Items.ToObject(message.ParserSite.ItemType.ToEnumerableType());
