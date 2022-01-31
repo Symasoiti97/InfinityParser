@@ -29,7 +29,7 @@ namespace Db.Models
         public string ExcludeFilter { get; set; }
 
         public Guid ClientId { get; set; }
-        public virtual ClientDb Client { get; set; }
+        public virtual UserDb User { get; set; }
 
         public Guid SiteId { get; set; }
         public virtual SiteDb Site { get; set; }

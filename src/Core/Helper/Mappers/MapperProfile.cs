@@ -26,7 +26,7 @@ namespace Helper.Mappers
 
             CreateMap<DataSiteDto, DataSiteDto>();
 
-            CreateMap<ClientDb, ClientDto>();
+            CreateMap<UserDb, ClientDto>();
         }
 
         private static T MapFromJson<T>(string value) where T : new()

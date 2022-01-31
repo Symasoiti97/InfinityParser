@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.1</TargetFramework>
+        <Configurations>Debug;Release;x64</Configurations>
+        <Platforms>AnyCPU;x64</Platforms>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Compile Update="Services\AuthenticationService.cs">
+            <DependentUpon>IAuthenticationService.cs</DependentUpon>
+        </Compile>
+        <Compile Update="Services\PasswordService.cs">
+            <DependentUpon>IPasswordService.cs</DependentUpon>
+        </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Api.Dto\Api.Dto.csproj" />
+        <ProjectReference Include="..\Core\Db\Db.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.Cryptography.KeyDerivation" Version="3.1.9" />
+        <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="5.5.0" />
+        <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.5.0" />
+    </ItemGroup>
+
+</Project>

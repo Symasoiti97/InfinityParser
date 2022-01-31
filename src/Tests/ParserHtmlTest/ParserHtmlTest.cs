@@ -63,7 +63,7 @@ namespace ParserHtmlTest
 
             var dataProvider = serviceProvider.GetService<IDataProvider>();
 
-            var client = new ClientDb
+            var client = new UserDb
             {
                 Id = Guid.NewGuid(),
                 Name = "Test Client"
